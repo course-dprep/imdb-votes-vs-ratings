@@ -11,7 +11,9 @@
 ## Motivation
 
 The relationship between the number of votes and the average rating of movies could give an interesting insight into audience behavior and preferences. At first the expectation would be that more votes lead to a higher rating, but it is not clear if this is always the case. By researching this relationship, knowledge is gained that is valuable for film studios, reviewers and marketing professionals in the entertainment industry.
+
 The relationship is controlled for 1) the difference in genre, and 2) the difference between movies and series. Different genres can attract different audiences which could have a different behavior towards giving ratings. A very wide spread popular movie could be rated very different than a very niche genre for a specific audience. The difference between movies and series can lead to different outcomes because the length and setting in which people view those two can vary.
+
 Due to prior research on the polarization effect, the expectation is that there is not a linear relationship between the number of votes and the average rating of movies but a quadratic one. Because popular movies or series tend to create a stronger and more extreme reaction, they have very high but also very low ratings. The ones that are neutral are often seen as not worthy to give a online review.
 
 
