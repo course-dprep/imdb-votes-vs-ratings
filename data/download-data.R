@@ -1,2 +1,16 @@
-# This script will be used to populate the \data directory
-# with all necessary raw data files.
+library(readr)
+
+# Programmatic download (sample size for speed/reproducibility)
+basics <- read_tsv(
+  "https://datasets.imdbws.com/title.basics.tsv.gz",
+  na = "\\N",
+  col_select = c(tconst, titleType, startYear, genres),
+  n_max = 200000
+)
+
+ratings <- read_tsv(
+  "https://datasets.imdbws.com/title.ratings.tsv.gz",
+  na = "\\N",
+  col_select = c(tconst, averageRating, numVotes),
+  n_max = 200000
+)
