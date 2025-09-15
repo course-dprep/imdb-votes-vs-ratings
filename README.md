@@ -53,9 +53,10 @@ Additionally, plots are produced for each regression model to show the effects v
 
 This project is set up as part of the Master's course [Data Preparation & Workflow Management](https://dprep.hannesdatta.com/) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu/), the Netherlands.
 
-The project is implemented by our team 5 members: 
-Sanne Wielders, 
-Jeroen Swolfs, 
-Edwin van Zon, 
-Eveline Verhage, 
-Eefje van der Sanden
+The project is implemented by team the following five members: 
+- Sanne Wielders, e-mail: s.c.h.wielders@tilburguniversity.edu
+- Jeroen Swolfs, e-mail: 
+- Edwin van Zon, e-mail: 
+- Eveline Verhage, e-mail: 
+- Eefje van der Sanden, e-mail: 
+
