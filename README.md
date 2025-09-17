@@ -80,6 +80,7 @@ Additionally, plots are produced for each regression model to show the effects v
 ## Repository Overview 
 
 The repository is structured as follows: 
+```
 .
 ├── .gitignore # Git ignore rules
 ├── .Rhistory # R session history (not needed for analysis)
@@ -97,6 +98,7 @@ The repository is structured as follows:
 │ │ └── analysis.R # Correlation and regression analysis
 │ └── data-preparation/
 │ └── data-cleaning.R # Preprocessing and merging datasets
+```
 
 ## Dependencies 
 
