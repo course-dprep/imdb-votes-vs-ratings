@@ -81,23 +81,22 @@ Additionally, plots are produced for each regression model to show the effects v
 
 The repository is structured as follows: 
 ```
-.
-├── .gitignore # Git ignore rules
-├── .Rhistory # R session history (not needed for analysis)
-├── DESCRIPTION # Project metadata
-├── makefile # Workflow automation (build targets)
-├── README.md # Project documentation (this file)
-├── team-project-team5.Rproj # RStudio project file
-├── data/
-│ └── download-data.R # Script to download raw IMDb datasets
-├── reporting/
-│ ├── report.Rmd # Project report in RMarkdown
-│ └── start_app.R # Script to launch reporting app
-├── src/
-│ ├── analysis/
-│ │ └── analysis.R # Correlation and regression analysis
-│ └── data-preparation/
-│ └── data-cleaning.R # Preprocessing and merging datasets
+├── .gitignore
+├── .Rhistory 
+├── DESCRIPTION 
+├── makefile 
+├── README.md 
+├── team-project-team5.Rproj 
+├── data
+│ └── download-data.R 
+├── reporting
+│ ├── report.Rmd 
+│ └── start_app.R 
+├── src
+│ ├── analysis
+│ │ └── analysis.R 
+│ └── data-preparation
+│ └── data-cleaning.R 
 ```
 
 ## Dependencies 
