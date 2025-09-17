@@ -50,21 +50,21 @@ Additionally, plots are produced for each regression model to show the effects v
 *Provide step-by-step instructions that have to be followed to run this workflow.*
 
 ## Resources
-Hsu, P., Shen, Y., & Xie, X. (2014). Predicting Movies User Ratings with Imdb Attributes. In Lecture notes in computer science (pp. 444–453). https://doi.org/10.1007/978-3-319-11740-9_41 
-IMDB data files download. (n.d.). https://datasets.imdbws.com/ 
-IMDB Non-Commercial datasets. (n.d.). developer.imdb.com. https://developer.imdb.com/non-commercial-datasets/ 
-Ramos, M., Calvão, A. M., & Anteneodo, C. (2015). Statistical patterns in movie rating behavior. PLoS ONE, 10(8), e0136083. https://doi.org/10.1371/journal.pone.0136083 
-Unveiling Audience Preferences: A big data analysis of IMDB movie ratings and trends. (2025, June 25). IEEE Conference Publication | IEEE Xplore. https://ieeexplore.ieee.org/abstract/document/11089925
+- Hsu, P., Shen, Y., & Xie, X. (2014). Predicting Movies User Ratings with Imdb Attributes. In Lecture notes in computer science (pp. 444–453). https://doi.org/10.1007/978-3-319-11740-9_41 
+- IMDB data files download. (n.d.). https://datasets.imdbws.com/ 
+- IMDB Non-Commercial datasets. (n.d.). developer.imdb.com. https://developer.imdb.com/non-commercial-datasets/ 
+- Ramos, M., Calvão, A. M., & Anteneodo, C. (2015). Statistical patterns in movie rating behavior. PLoS ONE, 10(8), e0136083. https://doi.org/10.1371/journal.pone.0136083 
+- Unveiling Audience Preferences: A big data analysis of IMDB movie ratings and trends. (2025, June 25). IEEE Conference Publication | IEEE Xplore. https://ieeexplore.ieee.org/abstract/document/11089925
 
 
 ## Authors
 This project is set up as part of the Master's course [Data Preparation & Workflow Management](https://dprep.hannesdatta.com/) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu/), the Netherlands.
 
-# Team 5
+### Team 5
 
-- [Sanne Wielders](https://github.com/SanneWielders) – e-mail: s.c.h.wielders@tilburguniversity.edu  
-- [Jeroen Swolfs](https://github.com/JeroenSwolfs) – e-mail: j.a.j.d.swolfs@tilburguniversity.edu 
-- [Edwin van Zon](https://github.com/edwinvanzon) – e-mail: e.vanzon@tilburguniversity.edu  
-- [Eveline Verhage](https://github.com/eef223) – e-mail: e.m.a.verhage@tilburguniversity.edu  
-- [Eefje van der Sanden](https://github.com/EefjevdSanden) – e-mail: e.j.m.vdrsanden@tilburguniversity.edu
+- [Sanne Wielders](https://github.com/SanneWielders), e-mail: s.c.h.wielders@tilburguniversity.edu  
+- [Jeroen Swolfs](https://github.com/JeroenSwolfs), e-mail: j.a.j.d.swolfs@tilburguniversity.edu 
+- [Edwin van Zon](https://github.com/edwinvanzon), e-mail: e.vanzon@tilburguniversity.edu  
+- [Eveline Verhage](https://github.com/eef223), e-mail: e.m.a.verhage@tilburguniversity.edu  
+- [Eefje van der Sanden](https://github.com/EefjevdSanden), e-mail: e.j.m.vdrsanden@tilburguniversity.edu
 
