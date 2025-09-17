@@ -88,15 +88,15 @@ The repository is structured as follows:
 ├── README.md 
 ├── team-project-team5.Rproj 
 ├── data
-│ └── download-data.R 
+  └── download-data.R 
 ├── reporting
-│ ├── report.Rmd 
-│ └── start_app.R 
+  ├── report.Rmd 
+  └── start_app.R 
 ├── src
-│ ├── analysis
-│ │ └── analysis.R 
-│ └── data-preparation
-│ └── data-cleaning.R 
+  ├── analysis
+    └── analysis.R 
+  └── data-preparation
+    └── data-cleaning.R 
 ```
 
 ## Dependencies 
