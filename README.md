@@ -18,9 +18,56 @@ Sub questions:
 
 ## Data
 
-- What dataset(s) did you use? How was it obtained?
-- How many observations are there in the final dataset? 
-- Include a table of variable description/operstionalisation. 
+### Datasets used and how obtained  
+The analysis uses two official **IMDb datasets** ([IMDb Interfaces](https://www.imdb.com/interfaces/)):  
+
+- `title.basics.tsv.gz` – metadata on titles (type, release year, genres)  
+- `title.ratings.tsv.gz` – user ratings and vote counts  
+
+For reproducibility and speed, we downloaded a **programmatic sample of 200,000 rows** from each file and merged them using the unique identifier `tconst`.  
+
+---
+
+### Final dataset  
+From the merged data, a **cleaned analytical dataset** was created with the following steps:  
+
+- Limited to **movies and series** (`movie`, `tvSeries`, `tvMiniSeries`)  
+- Excluded titles with fewer than **1,000 votes** (to ensure stable rating estimates)  
+- `numVotes` was **log-transformed** (`logVotes`) to reduce skew  
+- Genres were collapsed into two broad **genre families**:  
+  - *Escapist*: Fantasy, Comedy, Romance  
+  - *Heavy*: Drama, Thriller  
+- Content form was recoded into **`type`**: *movie* vs *series*  
+
+This cleaned dataset is the one used in all analyses.  
+
+---
+
+### Observations  
+- **Total titles analyzed:** 17,243  
+- **Movies:** 15,631  
+  - Escapist → 3,970  
+  - Heavy → 6,220  
+- **Series:** 1,612  
+  - Escapist → *(observation numbers will follow)*  
+  - Heavy → *(observation numbers will follow)*  
+
+---
+
+### Variables & operationalisation  
+
+| Variable        | Description       s            | Type         | Operationalisation |
+|-----------------|-------------------------------|--------------|--------------------|
+| `tconst`        | IMDb unique identifier        | ID           | Used to merge `basics` and `ratings` datasets |
+| `titleType`     | Original IMDb title type      | Categorical  | Kept for reference; collapsed into `type` |
+| `type`          | Content form                  | Categorical  | Recoded: *movie* vs *series* |
+| `startYear`     | Release year                  | Continuous   | Used for descriptives; not in main regression |
+| `genres`        | Original genre labels         | String       | Source for collapsing into `genre_family` |
+| `genre_family`  | Broad genre grouping          | Categorical  | *Escapist* (Fantasy, Comedy, Romance) vs *Heavy* (Drama, Thriller) |
+| `averageRating` | IMDb mean user rating (1–10)  | Continuous   | Independent variable |
+| `numVotes`      | Raw number of IMDb votes      | Continuous   | Popularity measure |
+| `logVotes`      | Log-transformed votes         | Continuous   | Derived variable: `log10(numVotes)`; used in regression & plots |
+
 
 ## Method
 
