@@ -2,8 +2,6 @@
 # Popularity vs. Quality: exploring the quadtric relationship between ratings and vote counts on IMDb
 This study investigates the relationship between popularity (measured by the number of votes) and perceived quality (average IMDb rating) of films and series. Using IMDb data, the analysis examines whether highly rated titles also attract more votes, or whether popularity and quality diverge and it explores whether this relationship differs across genres and between movies and series (i.e. content form). 
 
----
-
 ## Motivation
 
 The relationship between the number of votes and the average rating of movies could give an interesting insight into audience behavior and preferences. At first the expectation would be that more votes lead to a higher rating, but it is not clear if this is always the case. By researching this relationship, knowledge is gained that is valuable for film studios, reviewers and marketing professionals in the entertainment industry.
@@ -17,8 +15,6 @@ What is the relationship between the number of votes and the average rating of m
 Sub questions: 
   1. Does the relationship between number of votes and average rating differ across movie genres (escapist (fantasy, comedy, romance) and heavy (drama, thriller))?
   2. Does the relationship between number of votes and average rating differ across movies and series (i.e. content form)?
-
----
 
 ## Data
 
@@ -66,8 +62,6 @@ This cleaned dataset is the one used in all analyses.
 | `numVotes`      | Raw number of IMDb votes      | Continuous   | Popularity measure |
 | `logVotes`      | Log-transformed votes         | Continuous   | Derived variable: `log10(numVotes)`; used in regression & plots |
 
----
-
 ## Method
 
 The first step in R is visual; the number of votes against the average rating are plotted. To handle the extreme skew in vote counts (since probably a few titles get millions of votes while most get very few) the votes variable is log transformed. 
@@ -78,32 +72,22 @@ A polynomial regression model with log(votes) as the dependent variable and rati
 
 Additionally, plots are produced for each regression model to show the effects visually. 
 
----
-
 ## Preview of Findings 
 - Describe the gist of your findings (save the details for the final paper!)
 - How are the findings/end product of the project deployed?
 - Explain the relevance of these findings/product. 
 
----
-
 ## Repository Overview 
 
 **Include a tree diagram that illustrates the repository structure*
-
----
 
 ## Dependencies 
 
 *Explain any tools or packages that need to be installed to run this workflow.*
 
----
-
 ## Running Instructions 
 
 *Provide step-by-step instructions that have to be followed to run this workflow.*
-
----
 
 ## Resources
 - Hsu, P., Shen, Y., & Xie, X. (2014). Predicting Movies User Ratings with Imdb Attributes. In Lecture notes in computer science (pp. 444–453). https://doi.org/10.1007/978-3-319-11740-9_41 
@@ -111,8 +95,6 @@ Additionally, plots are produced for each regression model to show the effects v
 - IMDB Non-Commercial datasets. (n.d.). developer.imdb.com. https://developer.imdb.com/non-commercial-datasets/ 
 - Ramos, M., Calvão, A. M., & Anteneodo, C. (2015). Statistical patterns in movie rating behavior. PLoS ONE, 10(8), e0136083. https://doi.org/10.1371/journal.pone.0136083 
 - Unveiling Audience Preferences: A big data analysis of IMDB movie ratings and trends. (2025, June 25). IEEE Conference Publication | IEEE Xplore. https://ieeexplore.ieee.org/abstract/document/11089925
-
----
 
 ## Authors
 This project is set up as part of the Master's course [Data Preparation & Workflow Management](https://dprep.hannesdatta.com/) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu/), the Netherlands.
