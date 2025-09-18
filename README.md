@@ -68,7 +68,7 @@ The analysis begins with a visual exploration of the data in R, where the distri
 
 Next, the correlation between votes and ratings is calculated to provide a preliminary indication of their relationship. A very low correlation could suggest no relationship or a non-linear relationship.
 
-To formally test the relationship, a polynomial regression model is estimated with rating as the dependent variable and log(votes) and log(votes)^2 as independent variables. This allows us to capture potential non-linear effects of vote counts on ratings.
+To formally test the relationship, a polynomial regression model is estimated with rating as the dependent variable and log(votes) and log(votes)<sup>2</sup> as independent variables. This allows us to capture potential non-linear effects of vote counts on ratings.
 
 To explore potential moderating effects of genre, an interaction term between ratings and genre (categorized as escapist: fantasy, comedy, romance; and heavy: drama, thriller) is added to a separate regression model. Similarly, another model includes an interaction term between ratings and content form. Finally, a full model combines both interaction terms to assess whether including these moderators improves model fit.
 
@@ -105,7 +105,7 @@ The repository is structured as follows:
 This repository contains R scripts and resources for data analysis and visualisation. To ensure smooth execution, it depends on a set of packages, most of which are built-in libraries.
 
 External packages used
-- tidyverse ```install.packages("tidyverse")```
+- tidyverse ```install.packages("tidyverse")```<br>
   Tidyverse is notably used for visualization (ggplot2) and data manipulation (dplyr)
 
 ## Running Instructions 
@@ -123,7 +123,7 @@ External packages used
 This project is set up as part of the Master's course [Data Preparation & Workflow Management](https://dprep.hannesdatta.com/) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu/), the Netherlands.
 
 ### Team 5
-
+This team comprises students participating in the aforementioned program.
 - [Sanne Wielders](https://github.com/SanneWielders), e-mail: s.c.h.wielders@tilburguniversity.edu  
 - [Jeroen Swolfs](https://github.com/JeroenSwolfs), e-mail: j.a.j.d.swolfs@tilburguniversity.edu 
 - [Edwin van Zon](https://github.com/edwinvanzon), e-mail: e.vanzon@tilburguniversity.edu  
