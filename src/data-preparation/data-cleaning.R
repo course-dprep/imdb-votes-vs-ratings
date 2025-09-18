@@ -23,23 +23,26 @@ ggplot(imdb_all, aes(x=log10(numVotes), y=averageRating)) +
 # exploration of sub question 1
 ## Map to genre families
 movies_fam <- imdb %>%
-  filter(titleType=="movie", numVotes>=1000, !is.na(genres)) %>%
+  filter(titleType %in% c("movie", "tvMovie", "tvSeries", "tvMiniSeries"), 
+         numVotes >= 1000, !is.na(genres)) %>%
   select(tconst, genres, averageRating, numVotes) %>%
-  separate_rows(genres, sep=",") %>%
+  separate_rows(genres, sep = ",") %>%
   mutate(fam = case_when(
-    genres %in% c("Fantasy","Comedy","Romance") ~ "Escapist",
-    genres %in% c("Drama","Thriller")           ~ "Heavy",
+    genres %in% c("Fantasy","Comedy","Romance","Action","Adventure", "Animation", "Family") ~ "Escapist",
+    genres %in% c("Drama","Thriller","Biography", "Crime", "Documentary") ~ "Heavy",
     TRUE ~ NA_character_
   )) %>%
   filter(!is.na(fam)) %>%
   group_by(tconst) %>%
   summarise(
-    genre_family = ifelse(n_distinct(fam)==1, first(fam), NA_character_),
+    genre_family = case_when(
+      n_distinct(fam) == 1 ~ first(fam),
+      n_distinct(fam) > 1 ~ "Gemixt"
+    ),
     averageRating = first(averageRating),
     numVotes = first(numVotes),
-    .groups="drop"
-  ) %>%
-  filter(!is.na(genre_family))
+    .groups = "drop"
+  )
 
 ## Correlation per family (short table)
 movies_fam %>%
@@ -56,8 +59,8 @@ ggplot(movies_fam, aes(x=log10(numVotes), y=averageRating, color=genre_family)) 
 
 # exploration of sub question 2
 imdb_types <- imdb %>%
-  filter(titleType %in% c("movie","tvSeries","tvMiniSeries"), numVotes>=1000) %>%
-  mutate(type = ifelse(titleType=="movie","movie","series"))
+  filter(titleType %in% c("movie", "tvMovie", "tvSeries","tvMiniSeries"), numVotes>=1000) %>%
+  mutate(type = ifelse(titleType %in% c("movie", "tvMovie"),"movie","series"))
 
 ## Correlation per type
 imdb_types %>%
@@ -71,3 +74,11 @@ ggplot(imdb_types, aes(x=log10(numVotes), y=averageRating, color=type)) +
   geom_smooth(method="lm") +
   labs(title="Votes vs Rating by Content Form",
        x="log10(Number of Votes)", y="Average Rating", color="Content form")
+
+
+# merging imdb_types and movies_fam to a complete dataset
+imdb_complete <- imdb_types %>%
+  select(tconst, titleType, genres, averageRating, numVotes, type) %>%  
+  inner_join(
+    movies_fam %>% select(tconst, genre_family),
+    by = "tconst")
