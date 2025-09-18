@@ -4,7 +4,7 @@ This study investigates the relationship between popularity (measured by the num
 
 ## Motivation
 
-The relationship between the number of votes and the average rating of movies could give an interesting insight into audience behavior and preferences. At first the expectation would be that more votes lead to a higher rating, but it is not clear if this is always the case. By researching this relationship, knowledge is gained that is valuable for film studios, reviewers and marketing professionals in the entertainment industry.
+The relationship between the number of votes and the average rating of movies could give an interesting insight into audience behavior and preferences. By researching the relationship between number of votes and average rating, knowledge is gained that is valuable for film studios, reviewers and marketing professionals in the entertainment industry.
 
 Due to prior research on the polarization effect, the expectation is that there is not a linear relationship between the number of votes and the average rating of movies but a quadratic one. There are two competing hypotheses on the shape of this non-linear (quadratic) relationship. First, it could be that very popular (i.e. high rating) and very non-popular (i.e. low rating) content is reviewed more often because strong opinions might be expressed more often. This would create a concave up relationship between rating and vote count. On the other hand, it could be that more mainstream movies which are watched very often, receive also many ratings which are all quite average because it appeals to a large mass. This would be the case of a concave down relationship.
 
@@ -64,13 +64,15 @@ This cleaned dataset is the one used in all analyses.
 
 ## Method
 
-The first step in R is visual; the number of votes against the average rating are plotted. To handle the extreme skew in vote counts (since probably a few titles get millions of votes while most get very few) the votes variable is log transformed. 
+The analysis begins with a visual exploration of the data in R, where the distribution of ratings is examined across different vote counts. To account for the extreme skew in vote counts—since a few titles receive millions of votes while most receive very few—the votes variable is log-transformed.
 
-Then the correlation between votes and ratings is calculated to get an indication of the relationship.  A very low correlation could hint at no relationship or a non-linear relationship. 
+Next, the correlation between votes and ratings is calculated to provide a preliminary indication of their relationship. A very low correlation could suggest no relationship or a non-linear relationship.
 
-A polynomial regression model with log(votes) as the dependent variable and rating as the independent variable allows to test the actual relationship between the primary variables of interest. To explore the moderating effect of genre escapist (fantasy, comedy, romance) and heavy (drama, thriller)), an interaction term of ratings and genre is created and added to the regression. In a seperate regression, an interaction term for content form and ratings is created and added to the regression. As a fourth step, the full model is tested where both interaction terms are added to test whether it improves model fit.
+To formally test the relationship, a polynomial regression model is estimated with rating as the dependent variable and log(votes) and log(votes)^2 as independent variables. This allows us to capture potential non-linear effects of vote counts on ratings.
 
-Additionally, plots are produced for each regression model to show the effects visually. 
+To explore potential moderating effects of genre, an interaction term between ratings and genre (categorized as escapist: fantasy, comedy, romance; and heavy: drama, thriller) is added to a separate regression model. Similarly, another model includes an interaction term between ratings and content form. Finally, a full model combines both interaction terms to assess whether including these moderators improves model fit.
+
+For each regression, visualizations are produced to illustrate the relationships and interaction effects, providing a clear, graphical interpretation of the results.
 
 ## Preview of Findings 
 - Describe the gist of your findings (save the details for the final paper!)
@@ -100,8 +102,11 @@ The repository is structured as follows:
 ```
 
 ## Dependencies 
+This repository contains R scripts and resources for data analysis and visualisation. To ensure smooth execution, it depends on a set of packages, most of which are built-in libraries.
 
-*Explain any tools or packages that need to be installed to run this workflow.*
+External packages used
+- tidyverse (install by running 'install.packages("tidyverse")')
+  Tidyverse is notably used for visualization (ggplot2) and data manipulation (dplyr)
 
 ## Running Instructions 
 
