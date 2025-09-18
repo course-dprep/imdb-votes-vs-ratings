@@ -105,7 +105,7 @@ The repository is structured as follows:
 This repository contains R scripts and resources for data analysis and visualisation. To ensure smooth execution, it depends on a set of packages, most of which are built-in libraries.
 
 External packages used
-- tidyverse (install by running 'install.packages("tidyverse")')
+- tidyverse ```install.packages("tidyverse")```
   Tidyverse is notably used for visualization (ggplot2) and data manipulation (dplyr)
 
 ## Running Instructions 
