@@ -18,49 +18,55 @@ Sub questions:
 
 ## Data
 
-### Datasets used and how obtained  
-The analysis uses two official **IMDb datasets** ([IMDb Interfaces](https://www.imdb.com/interfaces/)):  
+### Sources
+We use two official **IMDb datasets** ([IMDb Interfaces](https://www.imdb.com/interfaces/)):
 
-- `title.basics.tsv.gz` – metadata on titles (type, release year, genres)  
-- `title.ratings.tsv.gz` – user ratings and vote counts  
+- **`title.basics.tsv.gz`** — metadata on titles (type, release year, genres)  
+- **`title.ratings.tsv.gz`** — user ratings and vote counts  
 
-For reproducibility and speed, we downloaded a **programmatic sample of 200,000 rows** from each file and merged them using the unique identifier `tconst`.  
+For reproducibility and speed, a **sample of 200,000 rows** was downloaded from each file and merged via the unique identifier **`tconst`**.
 
-### Final dataset  
-From the merged data, a **cleaned analytical dataset** was created with the following steps:  
+### Cleaning & Preparation  
+The raw IMDb files were merged and then cleaned to produce an analytical dataset suitable for testing our research questions.  
 
-- Limited to **movies and series** (`movie`, `tvSeries`, `tvMiniSeries`)  
-- Excluded titles with fewer than **1,000 votes** (to ensure stable rating estimates)  
-- `numVotes` was **log-transformed** (`logVotes`) to reduce skew  
-- Genres were collapsed into two broad **genre families**:  
-  - *Escapist*: Fantasy, Comedy, Romance  
-  - *Heavy*: Drama, Thriller  
-- Content form was recoded into **`type`**: *movie* vs *series*  
-
-This cleaned dataset is the one used in all analyses.  
+Key steps:  
+- Removed titles with fewer than **1,000 votes** (to ensure stable ratings).  
+- Limited to the main content forms: **movies** (`movie`, `tvMovie`) and **series** (`tvSeries`, `tvMiniSeries`).  
+- Grouped genres into broader **families**:  
+  - *Escapist*: Fantasy, Comedy, Romance, Action, Adventure, Animation, Family  
+  - *Heavy*: Drama, Thriller, Biography, Crime, Documentary  
+  - *Gemixt*: titles spanning both groups  
+- Created a **final dataset** (`imdb_complete`) that combines ratings, votes, content form, and genre family.  
+- To address skew, the **log10 of vote counts** is used in visualizations and regressions.  
 
 ### Observations  
-- **Total titles analyzed:** 17,243  
-- **Movies:** 15,631  
-  - Escapist → 3,970  
-  - Heavy → 6,220  
-- **Series:** 1,612  
-  - Escapist → *(observation numbers will follow)*  
-  - Heavy → *(observation numbers will follow)*  
+From the current run (200k IMDb sample):  
 
-### Variables & operationalisation  
+- **All titles with ≥1,000 votes**: 19,345  
+- **After restricting to main content forms**: 17,959  
+- **Final dataset (`imdb_complete`)**: 17,162  
 
-| Variable        | Descriptions                  | Type         | Operationalisation |
-|-----------------|-------------------------------|--------------|--------------------|
-| `tconst`        | IMDb unique identifier        | ID           | Used to merge `basics` and `ratings` datasets |
-| `titleType`     | Original IMDb title type      | Categorical  | Kept for reference; collapsed into `type` |
-| `type`          | Content form                  | Categorical  | Recoded: *movie* vs *series* |
-| `startYear`     | Release year                  | Continuous   | Used for descriptives; not in main regression |
-| `genres`        | Original genre labels         | String       | Source for collapsing into `genre_family` |
-| `genre_family`  | Broad genre grouping          | Categorical  | *Escapist* (Fantasy, Comedy, Romance) vs *Heavy* (Drama, Thriller) |
-| `averageRating` | IMDb mean user rating (1–10)  | Continuous   | Independent variable |
-| `numVotes`      | Raw number of IMDb votes      | Continuous   | Popularity measure |
-| `logVotes`      | Log-transformed votes         | Continuous   | Derived variable: `log10(numVotes)`; used in regression & plots |
+Breakdown:  
+- **Movies**: 15,601  
+- **Series**: 1,561  
+- **By genre family (across movies & series)**:  
+  - Escapist → 4,822  
+  - Heavy → 5,408  
+  - Gemixt → 6,932  
+
+### Variables in Final Dataset (`imdb_complete`)
+
+| Variable          | Description                        | Type        | Notes                               |
+|-------------------|------------------------------------|-------------|-------------------------------------|
+| `tconst`          | IMDb unique identifier             | ID          | Used for joins                      |
+| `titleType`       | Original IMDb title type           | Categorical | e.g. `movie`, `tvSeries`            |
+| `type`            | Content form                       | Categorical | Recoded: *movie* vs *series*        |
+| `startYear`       | Release year                       | Continuous  | Used for descriptives               |
+| `genres`          | Original genre labels              | String      | Source for `genre_family`           |
+| `genre_family`    | Broad genre grouping               | Categorical | *Escapist*, *Heavy*, *Gemixt*       |
+| `averageRating`   | IMDb mean user rating (1–10)       | Continuous  | Per-title perceived quality         |
+| `numVotes`        | Number of IMDb votes               | Continuous  | Popularity measure                  |
+| `log10(numVotes)` | Log-transformed vote counts        | Continuous  | Applied in plots/regressions        |
 
 ## Method
 
