@@ -1,4 +1,13 @@
 # Use this file to keep certain files from being versioned (covered in the GitHub part of the course).
-
-.DS_Store
+# IDE / editor
 .Rproj.user
+.idea/
+.vscode/
+
+# R session + history
+.Rhistory
+.RData
+
+# OS-specific
+.DS_Store
+Thumbs.db
