@@ -11,3 +11,11 @@
 # OS-specific
 .DS_Store
 Thumbs.db
+
+# Ignore all data files
+*.tsv
+.tsv
+*.gz
+.gz
+*.tsv.gz
+.tsv.gz
