@@ -1,26 +1,32 @@
-library(readr)
-library(tidyverse)
+# Input
+library(vroom)
+library(dplyr)
+library(here)
 
-# Define data directory for reproducability
-data_dir <- "../data"
+# Define data directory for reproducibility
+data_dir <- here("src", "data")
+basics_path  <- file.path(data_dir, "title.basics.tsv.gz")
+ratings_path <- file.path(data_dir, "title.ratings.tsv.gz")
 
-# Read and safe basics datatable 
-basics <- read_tsv(
-  "https://datasets.imdbws.com/title.basics.tsv.gz",
-  na = "\\N",
-  col_select = c(tconst, titleType, startYear, genres),
-  n_max = 200000
-)
+# Define sources (IMDb datasets)
+basics_url  <- "https://datasets.imdbws.com/title.basics.tsv.gz"
+ratings_url <- "https://datasets.imdbws.com/title.ratings.tsv.gz"
 
-write_csv(basics, file.path(data_dir, "TitleBasics.csv"))
+# Download datasets
+download.file(basics_url, basics_path, mode = "wb", quiet = TRUE)
+download.file(ratings_url, ratings_path, mode = "wb", quiet = TRUE)
 
-# Read and safe ratings datatable 
-ratings <- read_tsv(
-  "https://datasets.imdbws.com/title.ratings.tsv.gz",
-  na = "\\N",
-  col_select = c(tconst, averageRating, numVotes),
-  n_max = 200000
-)
+# Transformation
+# Random sample with reproducibility
+set.seed(123)
+sample_basics <- vroom(basics_path, delim = "\t") %>%
+  slice_sample(n = 200000)
 
-write_csv(ratings, file.path(data_dir, "TitleRatings.csv"))
+set.seed(123)
+sample_ratings <- vroom(ratings_path, delim = "\t") %>%
+  slice_sample(n = 200000)
 
+# Output
+message("Random samples created:")
+message("Sample basics rows: ", nrow(sample_basics))
+message("Sample ratings rows: ", nrow(sample_ratings))

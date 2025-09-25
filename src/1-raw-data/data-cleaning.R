@@ -1,3 +1,4 @@
+
 # In this directory, you will keep all source code files relevant for 
 # preparing/cleaning your data.
 
@@ -7,18 +8,13 @@ library(tidyr)
 library(ggplot2)
 
 # merge basics and ratings
-imdb <- inner_join(basics, ratings, by = "tconst")
+imdb <- inner_join(sample_basics, sample_ratings, by = "tconst")
 
 # exploration of main question
 imdb_all <- imdb %>% filter(numVotes >= 1000)
 
 cor(imdb_all$numVotes, imdb_all$averageRating, use="complete.obs")
 
-ggplot(imdb_all, aes(x=log10(numVotes), y=averageRating)) +
-  geom_point(alpha=.2) +
-  geom_smooth(method="lm") +
-  labs(title="Votes vs Average Rating (All Titles)",
-       x="log10(Number of Votes)", y="Average Rating")
 
 # exploration of sub question 1
 ## Map to genre families
@@ -50,13 +46,6 @@ movies_fam %>%
   summarise(cor_votes_rating = cor(numVotes, averageRating, use="complete.obs"),
             n=n(), .groups="drop")
 
-## Plot
-ggplot(movies_fam, aes(x=log10(numVotes), y=averageRating, color=genre_family)) +
-  geom_point(alpha=.3) +
-  geom_smooth(method="lm") +
-  labs(title="Votes vs Rating by Genre Family (Movies)",
-       x="log10(Number of Votes)", y="Average Rating", color="Genre Family")
-
 # exploration of sub question 2
 imdb_types <- imdb %>%
   filter(titleType %in% c("movie", "tvMovie", "tvSeries","tvMiniSeries"), numVotes>=1000) %>%
@@ -67,13 +56,6 @@ imdb_types %>%
   group_by(type) %>%
   summarise(cor_votes_rating = cor(numVotes, averageRating, use="complete.obs"),
             n=n(), .groups="drop")
-
-## Plot
-ggplot(imdb_types, aes(x=log10(numVotes), y=averageRating, color=type)) +
-  geom_point(alpha=.3) +
-  geom_smooth(method="lm") +
-  labs(title="Votes vs Rating by Content Form",
-       x="log10(Number of Votes)", y="Average Rating", color="Content form")
 
 
 # merging imdb_types and movies_fam to a complete dataset
