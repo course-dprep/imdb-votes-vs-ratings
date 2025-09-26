@@ -1,66 +1,72 @@
-
 # In this directory, you will keep all source code files relevant for 
 # preparing/cleaning your data.
+source("src/1-raw-data/loading-packages.R")
 
-library(dplyr)
-library(tidyr)
-library(tidyr)
-library(ggplot2)
+# read sample files
+basics_path  <- "src/data/title.basics.tsv.gz"
+ratings_path <- "src/data/title.ratings.tsv.gz"
 
-# merge basics and ratings
-imdb <- inner_join(sample_basics, sample_ratings, by = "tconst")
+basics  <- read_tsv(basics_path,  na = "\\N",
+                    col_select = c(tconst, titleType, startYear, genres),
+                    show_col_types = FALSE)
 
-# exploration of main question
-imdb_all <- imdb %>% filter(numVotes >= 1000)
+ratings <- read_tsv(ratings_path, na = "\\N",
+                    col_select = c(tconst, averageRating, numVotes),
+                    show_col_types = FALSE)
 
-cor(imdb_all$numVotes, imdb_all$averageRating, use="complete.obs")
+# TRANSFORMATION
+# Merge on tconst
+imdb_raw <- basics %>%
+  inner_join(ratings, by = "tconst")
 
+# type casting and selection of relevant title types
+imdb_raw <- imdb_raw %>%
+  mutate(
+    startYear = suppressWarnings(as.integer(startYear)),
+    type = if_else(titleType %in% c("movie", "tvMovie"), "movie",
+                   if_else(titleType %in% c("tvSeries", "tvMiniSeries"), "series", "other"))
+  ) %>%
+  filter(type %in% c("movie", "series"))
 
-# exploration of sub question 1
-## Map to genre families
-movies_fam <- imdb %>%
-  filter(titleType %in% c("movie", "tvMovie", "tvSeries", "tvMiniSeries"), 
-         numVotes >= 1000, !is.na(genres)) %>%
-  select(tconst, genres, averageRating, numVotes) %>%
+# remove duplicates 
+imdb_dedup <- imdb_raw %>%
+  distinct(tconst, .keep_all = TRUE)
+
+# filter out the noise 
+imdb_clean <- imdb_dedup %>%
+  filter(numVotes >= 1000)
+
+# Feature engineering: genre_family
+genre_map <- imdb_clean %>%
+  filter(!is.na(genres), genres != "") %>%
+  select(tconst, genres) %>%
   separate_rows(genres, sep = ",") %>%
   mutate(fam = case_when(
-    genres %in% c("Fantasy","Comedy","Romance","Action","Adventure", "Animation", "Family") ~ "Escapist",
-    genres %in% c("Drama","Thriller","Biography", "Crime", "Documentary") ~ "Heavy",
+    genres %in% c("Fantasy","Comedy","Romance","Action","Adventure","Animation","Family") ~ "Escapist",
+    genres %in% c("Drama","Thriller","Biography","Crime","Documentary") ~ "Heavy",
     TRUE ~ NA_character_
   )) %>%
-  filter(!is.na(fam)) %>%
   group_by(tconst) %>%
   summarise(
     genre_family = case_when(
-      n_distinct(fam) == 1 ~ first(fam),
-      n_distinct(fam) > 1 ~ "Gemixt"
+      all(is.na(fam))               ~ NA_character_,
+      n_distinct(na.omit(fam)) == 1 ~ first(na.omit(fam)),
+      n_distinct(na.omit(fam)) >  1 ~ "Gemixt"
     ),
-    averageRating = first(averageRating),
-    numVotes = first(numVotes),
     .groups = "drop"
   )
 
-## Correlation per family (short table)
-movies_fam %>%
-  group_by(genre_family) %>%
-  summarise(cor_votes_rating = cor(numVotes, averageRating, use="complete.obs"),
-            n=n(), .groups="drop")
+# merge with extra features
+imdb_enriched <- imdb_clean %>%
+  left_join(genre_map, by = "tconst") %>%
+  select(tconst, titleType, type, startYear, genres, genre_family,
+         averageRating, numVotes)
 
-# exploration of sub question 2
-imdb_types <- imdb %>%
-  filter(titleType %in% c("movie", "tvMovie", "tvSeries","tvMiniSeries"), numVotes>=1000) %>%
-  mutate(type = ifelse(titleType %in% c("movie", "tvMovie"),"movie","series"))
+# OUTPUT
+dir.create("data/clean", showWarnings = FALSE, recursive = TRUE)
 
-## Correlation per type
-imdb_types %>%
-  group_by(type) %>%
-  summarise(cor_votes_rating = cor(numVotes, averageRating, use="complete.obs"),
-            n=n(), .groups="drop")
+write_csv(imdb_clean,    "data/clean/imdb_clean.csv")
+write_rds(imdb_clean,    "data/clean/imdb_clean.rds")
 
-
-# merging imdb_types and movies_fam to a complete dataset
-imdb_complete <- imdb_types %>%
-  select(tconst, titleType, genres, averageRating, numVotes, type) %>%  
-  inner_join(
-    movies_fam %>% select(tconst, genre_family),
-    by = "tconst")
+write_csv(imdb_enriched, "data/clean/imdb_enriched.csv")
+write_rds(imdb_enriched, "data/clean/imdb_enriched.rds")
