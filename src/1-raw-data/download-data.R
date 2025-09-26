@@ -1,7 +1,4 @@
-# Input
-library(vroom)
-library(dplyr)
-library(here)
+source("src/1-raw-data/loading-packages.R")
 
 # Define data directory for reproducibility
 data_dir <- here("src", "data")
