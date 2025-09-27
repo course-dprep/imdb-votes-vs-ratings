@@ -1,20 +1,23 @@
+#Load required packages
 source("src/1-raw-data/loading-packages.R")
 
-# Define data directory for reproducibility
+#Define data directory for reproducibility
 data_dir <- here("src", "data")
 basics_path  <- file.path(data_dir, "title.basics.tsv.gz")
 ratings_path <- file.path(data_dir, "title.ratings.tsv.gz")
 
-# Define sources (IMDb datasets)
+#Define source Urls (IMDb datasets)
+"title.basics: contains title-level information (e.g., type, year, genres)"
+"title.ratings: contains IMDb user ratings and vote counts."
 basics_url  <- "https://datasets.imdbws.com/title.basics.tsv.gz"
 ratings_url <- "https://datasets.imdbws.com/title.ratings.tsv.gz"
 
-# Download datasets
+#Download datasets to local "data" directory
 download.file(basics_url, basics_path, mode = "wb", quiet = TRUE)
 download.file(ratings_url, ratings_path, mode = "wb", quiet = TRUE)
 
-# Transformation
-# Random sample with reproducibility
+#Create a random sample with reproducibility
+"Seed set at 123 ensures the same data used if the analysis is re-run. Set n = 200,000 to limit computation power required for the analysis."
 set.seed(123)
 sample_basics <- vroom(basics_path, delim = "\t") %>%
   slice_sample(n = 200000)
