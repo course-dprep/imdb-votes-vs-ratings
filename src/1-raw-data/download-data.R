@@ -1,7 +1,11 @@
-source("src/1-raw-data/loading-packages.R")
+# packages (root-relative)
+source("loading-packages.R")
+
+# raw files (root-relative)
+data_dir <- "src/data"
+dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
 
 # Define data directory for reproducibility
-data_dir <- here("src", "data")
 basics_path  <- file.path(data_dir, "title.basics.tsv.gz")
 ratings_path <- file.path(data_dir, "title.ratings.tsv.gz")
 

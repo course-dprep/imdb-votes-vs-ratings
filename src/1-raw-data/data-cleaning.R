@@ -1,6 +1,6 @@
 # In this directory, you will keep all source code files relevant for 
 # preparing/cleaning your data.
-source("src/1-raw-data/loading-packages.R")
+source("loading-packages.R")
 
 # read sample files
 basics_path  <- "src/data/title.basics.tsv.gz"
