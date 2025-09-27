@@ -3,6 +3,7 @@
 .Rproj.user
 .idea/
 .vscode/
+*.Rproj
 
 # R session + history
 .Rhistory

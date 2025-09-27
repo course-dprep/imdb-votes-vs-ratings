@@ -1,4 +1,4 @@
-# List all packages here using library()
+# Packages required for analyses. 
 library(readr)
 library(tidyverse)
 library(dplyr)
