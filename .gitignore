@@ -5,6 +5,10 @@
 .vscode/
 *.Rproj
 
+# Some personal files
+*.csv
+*.rds
+
 # R session + history
 .Rhistory
 .RData

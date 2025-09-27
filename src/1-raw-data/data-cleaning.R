@@ -86,8 +86,8 @@ imdb_enriched <- imdb_clean %>%
 # OUTPUT
 dir.create("data/clean", showWarnings = FALSE, recursive = TRUE)
 
-write_csv(imdb_clean,    "data/clean/imdb_clean.csv")
-write_rds(imdb_clean,    "data/clean/imdb_clean.rds")
+write_csv(imdb_clean, "data/clean/imdb_clean.csv")
+write_rds(imdb_clean, "data/clean/imdb_clean.rds")
 
 write_csv(imdb_enriched, "data/clean/imdb_enriched.csv")
 write_rds(imdb_enriched, "data/clean/imdb_enriched.rds")
