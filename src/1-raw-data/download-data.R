@@ -1,3 +1,4 @@
+print('starting download')
 # Load required packages (subfolder-relative; we run from src/1-raw-data/)
 source("loading-packages.R")
 
@@ -32,3 +33,4 @@ sample_ratings <- vroom(ratings_path, delim = "\t") %>%
 message("Random samples created:")
 message("Sample basics rows: ", nrow(sample_basics))
 message("Sample ratings rows: ", nrow(sample_ratings))
+print('download complete')

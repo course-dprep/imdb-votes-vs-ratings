@@ -1,4 +1,4 @@
-
+print('start importing')
 # In this directory, you will keep all source code files relevant for 
 # preparing/cleaning your data.
 
@@ -6,8 +6,8 @@
 source("loading-packages.R")
 
 #Read sample files
-basics_path  <- "src/data/title.basics.tsv.gz"
-ratings_path <- "src/data/title.ratings.tsv.gz"
+basics_path  <- "../data/title.basics.tsv.gz"
+ratings_path <- "../data/title.ratings.tsv.gz"
 
 basics  <- read_tsv(basics_path,  na = "\\N",
                     col_select = c(tconst, titleType, startYear, genres),
@@ -16,7 +16,7 @@ basics  <- read_tsv(basics_path,  na = "\\N",
 ratings <- read_tsv(ratings_path, na = "\\N",
                     col_select = c(tconst, averageRating, numVotes),
                     show_col_types = FALSE)
-
+print('imported')
 #TRANSFORMATION
 
 #Merge the datasets based on the common identifier (tconst)
@@ -86,10 +86,10 @@ imdb_enriched <- imdb_clean %>%
          averageRating, numVotes)
 
 # OUTPUT
-dir.create("data/clean", showWarnings = FALSE, recursive = TRUE)
+dir.create("../data/clean", showWarnings = FALSE, recursive = TRUE)
 
-write_csv(imdb_clean,    "data/clean/imdb_clean.csv")
-write_rds(imdb_clean,    "data/clean/imdb_clean.rds")
+write_csv(imdb_clean,    "../data/clean/imdb_clean.csv")
+write_rds(imdb_clean,    "../data/clean/imdb_clean.rds")
 
-write_csv(imdb_enriched, "data/clean/imdb_enriched.csv")
-write_rds(imdb_enriched, "data/clean/imdb_enriched.rds")
+write_csv(imdb_enriched, "../data/clean/imdb_enriched.csv")
+write_rds(imdb_enriched, "../data/clean/imdb_enriched.rds")
