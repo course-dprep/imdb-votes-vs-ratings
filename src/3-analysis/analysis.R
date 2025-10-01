@@ -1,22 +1,87 @@
-# In this directory, you will keep all source code related to your analysis.
+#Load required packages
+source("src/1-raw-data/loading-packages.R")
 
-# Exploration of main question
-ggplot(imdb_all, aes(x=log10(numVotes), y=averageRating)) +
-  geom_point(alpha=.2) +
-  geom_smooth(method="lm") +
-  labs(title="Votes vs Average Rating (All Titles)",
-       x="log10(Number of Votes)", y="Average Rating")
+#Load imdb dataset 
+imdb_analysis <- read_csv("data/clean/imdb_analysis.csv")
 
-# Exploration of sub question 1
-ggplot(movies_fam, aes(x=log10(numVotes), y=averageRating, color=genre_family)) +
-  geom_point(alpha=.3) +
-  geom_smooth(method="lm") +
-  labs(title="Votes vs Rating by Genre Family (Movies)",
-       x="log10(Number of Votes)", y="Average Rating", color="Genre Family")
+#Keep only those observations with an exclusive genre
+imdb_analysis <- imdb_analysis %>%
+  filter(genre_family == "Escapist" | genre_family == "Heavy")
 
-# Exploration of sub question 2
-ggplot(imdb_types, aes(x=log10(numVotes), y=averageRating, color=type)) +
-  geom_point(alpha=.3) +
-  geom_smooth(method="lm") +
-  labs(title="Votes vs Rating by Content Form",
-       x="log10(Number of Votes)", y="Average Rating", color="Content form")
+#Model 1: regress rating (averageRating) on the log number of votes (log_votes), controlling for period
+model_linear <- lm(averageRating ~ log_votes + period, data = imdb_analysis)
+summary(model_linear)
+tidy(model_linear)
+
+#Model 2: regress rating (averageRating) on the log number of votes (log_votes), the quadratic log number of votes (log_votes2), controlling for period
+model_quadratic <- lm(averageRating ~ log_votes + log_votes2 + period, data = imdb_analysis)
+summary(model_quadratic)
+tidy(model_quadratic)
+
+#Compare model fit
+anova(model_linear, model_quadratic)
+
+#Model 3 (subQ 1): Interaction with the genre variable
+model_interaction_genre <- lm( averageRating ~ log_votes + log_votes2 + genre_family +
+  log_votes*genre_family + log_votes2*genre_family, data = imdb_analysis)
+summary(model_interaction_genre)
+tidy(model_interaction_genre)
+
+anova(model_quadratic, model_interaction_genre)
+
+#Model 4 (subQ 2): Interaction with the type (movie vs film) variable
+model_interaction_type <- lm(
+  averageRating ~ log_votes + log_votes2 + type +
+    log_votes*type + log_votes2*type,
+  data = imdb_analysis)
+summary(model_interaction_type)
+tidy(model_interaction_type)
+
+anova(model_quadratic, model_interaction_type)
+
+#Model 5: For managerial practicallity, regress rating categories (averageRating) on the log number of votes (log_votes), the quadratic log number of votes (log_votes2), controlling for period. This is a logistic regression, as both the IV and DV are non-continuous.
+model_logistic_categories <- polr(rating_category ~ log_votes + I(log_votes2), 
+                  data = imdb_analysis, Hess = TRUE)
+
+summary(model_logistic_categories)
+tidy(model_logistic_categories)
+
+#Visualization
+#Model 1 & 2 
+Model_1_2 <- ggplot(imdb_analysis, aes(x = log_votes, y = averageRating)) +
+  geom_point(alpha = 0.1) +   # raw data
+  geom_smooth(method = "lm", formula = y ~ x, color = "blue") +   # linear
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), color = "red") +   # quadratic
+  labs(title = "Average Rating vs Number of votes, linear and quadratic log number of votes",
+       x = "Log(Number of Votes)", y = "Average Rating")
+
+#Model 3 
+Model_3 <- ggplot(imdb_analysis, aes(x = log_votes, y = averageRating, color = genre_family)) +
+  geom_point(alpha = 0.1) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE) +
+  labs(title = "Rating vs Votes (logged) by Genre (Heavy versus Escapist)",
+       x = "Log(Number of Votes)", y = "Average Rating") +
+  facet_wrap(~ genre_family)
+
+#Model 4
+Model_4 <- ggplot(imdb_analysis, aes(x = log_votes, y = averageRating, color = type)) +
+  geom_point(alpha = 0.1) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE) +
+  labs(title = "Rating vs Votes (logged) by content type (movie vs serie)",
+       x = "Log(Number of Votes)", y = "Average Rating") +
+  facet_wrap(~ type)
+
+#Model 5 
+Model_5 <- imdb_analysis %>%
+  mutate(vote_bin = cut(log_votes, breaks = 20)) %>%
+  group_by(vote_bin, rating_category) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(vote_bin) %>%
+  mutate(prop = n / sum(n)) %>%
+  ggplot(aes(x = vote_bin, y = prop, fill = rating_category)) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(title = "Distribution of Rating Categories across Log(Votes)",
+       x = "Log(Votes) (binned)", y = "Proportion")
+
+
+
