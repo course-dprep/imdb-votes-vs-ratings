@@ -2,7 +2,7 @@
 source("src/1-raw-data/loading-packages.R")
 
 #Load imdb dataset 
-imdb_analysis <- read_csv("data/clean/imdb_enriched.csv")
+imdb_analysis <- read_csv("../data/clean/imdb_enriched.csv")
 
 #Transformations
 
@@ -43,5 +43,5 @@ imdb_analysis <-imdb_analysis %>%
 imdb_analysis <- imdb_analysis %>%
   mutate(rating_category = factor(rating_category, levels = c("Very Bad", "Bad", "Average", "Good", "Excellent"), ordered = TRUE))
 
-write_csv(imdb_analysis, "data/clean/imdb_analysis.csv")
-write_rds(imdb_analysis, "data/clean/imdb_analysis.rds")
+write_csv(imdb_analysis, "../data/clean/imdb_analysis.csv")
+write_rds(imdb_analysis, "../data/clean/imdb_analysis.rds")
