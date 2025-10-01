@@ -1,34 +1,27 @@
-RSCRIPT   = Rscript --vanilla
-RAW_DIR   = ../../src/data
-CLEAN_DIR = ../../data/clean
+# Makefile for 1-raw-data, run in terminal with 'make raw' from root
 
-RAW   = $(RAW_DIR)/title.basics.tsv.gz $(RAW_DIR)/title.ratings.tsv.gz
-CLEAN = $(CLEAN_DIR)/imdb_clean.csv \
-        $(CLEAN_DIR)/imdb_clean.rds \
-        $(CLEAN_DIR)/imdb_enriched.csv \
-        $(CLEAN_DIR)/imdb_enriched.rds
+# Paths
+DATA_DIR = ../../data
+STAMP = $(DATA_DIR)/.download.stamp
 
-.PHONY: all clean
-all: $(CLEAN)
+# Default target
+all: $(STAMP)
 
-$(RAW_DIR)/.download.stamp: download-data.R | $(RAW_DIR)
-	$(RSCRIPT) download-data.R
-	touch $@
+# Run loading packages first (no file output, just ensures required packages are available)
+.PHONY: load-packages
+load-packages:
+	Rscript loading-packages.R
 
-$(RAW): $(RAW_DIR)/.download.stamp
-	@true
+# Download raw IMDb data and create samples
+$(STAMP): download-data.R loading-packages.R | $(DATA_DIR)
+	Rscript download-data.R
+	touch $(STAMP)
 
-$(CLEAN_DIR)/.clean.stamp: data-cleaning.R $(RAW) | $(CLEAN_DIR)
-	$(RSCRIPT) data-cleaning.R
-	touch $@
+# Ensure data directory exists
+$(DATA_DIR):
+	mkdir -p $(DATA_DIR)
 
-$(CLEAN): $(CLEAN_DIR)/.clean.stamp
-	@true
-
-$(RAW_DIR):
-	$(RSCRIPT) -e "dir.create('$(RAW_DIR)',  recursive=TRUE, showWarnings=FALSE)"
-$(CLEAN_DIR):
-	$(RSCRIPT) -e "dir.create('$(CLEAN_DIR)', recursive=TRUE, showWarnings=FALSE)"
-
+# Clean up downloaded data
 clean:
-	R -e "unlink('$(RAW_DIR)', recursive=TRUE); unlink('$(CLEAN_DIR)', recursive=TRUE)"
+	rm -f $(STAMP)
+	rm -f $(DATA_DIR)/*.tsv.gz
