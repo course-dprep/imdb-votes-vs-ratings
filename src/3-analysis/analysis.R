@@ -1,8 +1,8 @@
 #Load required packages
-source("src/1-raw-data/loading-packages.R")
+source("../1-raw-data/loading-packages.R")
 
 #Load imdb dataset 
-imdb_analysis <- read_csv("data/clean/imdb_analysis.csv")
+imdb_analysis <- read_csv("../../data/clean/imdb_analysis.csv")
 
 #Keep only those observations with an exclusive genre
 imdb_analysis <- imdb_analysis %>%
@@ -12,11 +12,13 @@ imdb_analysis <- imdb_analysis %>%
 model_linear <- lm(averageRating ~ log_votes + period, data = imdb_analysis)
 summary(model_linear)
 tidy(model_linear)
+print('Model 1 made')
 
 #Model 2: regress rating (averageRating) on the log number of votes (log_votes), the quadratic log number of votes (log_votes2), controlling for period
 model_quadratic <- lm(averageRating ~ log_votes + log_votes2 + period, data = imdb_analysis)
 summary(model_quadratic)
 tidy(model_quadratic)
+print('Model 2 made')
 
 #Compare model fit
 anova(model_linear, model_quadratic)
@@ -26,22 +28,29 @@ model_interaction_genre <- lm( averageRating ~ log_votes + log_votes2 + genre_fa
   log_votes*genre_family + log_votes2*genre_family, data = imdb_analysis)
 summary(model_interaction_genre)
 tidy(model_interaction_genre)
+print('Model 3 made')
 
+#-------- this line gives error -------------
 anova(model_quadratic, model_interaction_genre)
+#---------------------------------------------
 
 #Model 4 (subQ 2): Interaction with the type (movie vs film) variable
 model_interaction_type <- lm(
   averageRating ~ log_votes + log_votes2 + type +
     log_votes*type + log_votes2*type,
   data = imdb_analysis)
+
+print('Model 4 made')
 summary(model_interaction_type)
 tidy(model_interaction_type)
+
 
 anova(model_quadratic, model_interaction_type)
 
 #Model 5: For managerial practicallity, regress rating categories (averageRating) on the log number of votes (log_votes), the quadratic log number of votes (log_votes2), controlling for period. This is a logistic regression, as both the IV and DV are non-continuous.
 model_logistic_categories <- polr(rating_category ~ log_votes + I(log_votes2), 
                   data = imdb_analysis, Hess = TRUE)
+print('Model 5 made')
 
 summary(model_logistic_categories)
 tidy(model_logistic_categories)
@@ -83,5 +92,5 @@ Model_5 <- imdb_analysis %>%
   labs(title = "Distribution of Rating Categories across Log(Votes)",
        x = "Log(Votes) (binned)", y = "Proportion")
 
-
+print('Visualization of all models done')
 

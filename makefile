@@ -1,20 +1,29 @@
-# This makefile will be used to automate the
-# different steps in your project.
-.PHONY: all raw-data clean help
+# Top-level Makefile (placed in project root), run in terminal with 'make' from root
 
-# Run only the raw-data stage by default
-all: raw-data
+.PHONY: all raw prep analysis report clean
 
-# Delegate to the sub-makefile in src/1-raw-data
-raw-data:
+# Full pipeline
+all: raw prep analysis report
+
+# Step 1: raw data
+raw:
 	$(MAKE) -C src/1-raw-data
 
-# Clean (optional: calls the stage's clean if you have it)
-clean:
-	-$(MAKE) -C src/1-raw-data clean
+# Step 2: data preparation (cleaning + preparation)
+prep: raw
+	$(MAKE) -C src/2-data-preparation
 
-help:
-	@echo "Targets:"
-	@echo "  make         -> run raw-data stage"
-	@echo "  make raw-data"
-	@echo "  make clean   -> clean raw-data outputs (if stage has a clean rule)"
+# Step 3: analysis
+analysis: prep
+	$(MAKE) -C src/3-analysis
+
+# Step 4: reporting
+report: analysis
+	$(MAKE) -C src/4-reporting
+
+# Clean everything
+clean:
+	$(MAKE) -C src/1-raw-data clean
+	$(MAKE) -C src/2-data-preparation clean
+	$(MAKE) -C src/3-analysis clean
+	$(MAKE) -C src/4-reporting clean

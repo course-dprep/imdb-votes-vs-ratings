@@ -2,8 +2,8 @@ print('starting download')
 # Load required packages (subfolder-relative; we run from src/1-raw-data/)
 source("loading-packages.R")
 
-# Data directory is the sibling folder ../data
-data_dir <- "../data"
+# Data directory is the sibling folder ../../data
+data_dir <- "../../data"
 dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
 
 basics_path  <- file.path(data_dir, "title.basics.tsv.gz")
