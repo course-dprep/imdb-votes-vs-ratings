@@ -30,21 +30,15 @@ summary(model_interaction_genre)
 tidy(model_interaction_genre)
 print('Model 3 made')
 
+#-------- this line gives error -------------
 anova(model_quadratic, model_interaction_genre)
+#---------------------------------------------
 
 #Model 4 (subQ 2): Interaction with the type (movie vs film) variable
 model_interaction_type <- lm(
   averageRating ~ log_votes + log_votes2 + type +
     log_votes*type + log_votes2*type,
   data = imdb_analysis)
-
---------------
-  ## OPTION FIXED MODEL 4 - Model 4 code doesn't run!!!
-  model_interaction_type <- lm(
-    averageRating ~ log_votes + log_votes2 + type +
-      log_votes*movies + log_votes2*series,
-    data = imdb_analysis)
------------
 
 print('Model 4 made')
 summary(model_interaction_type)
