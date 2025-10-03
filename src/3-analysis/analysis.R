@@ -48,6 +48,7 @@ Model_1_2 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
   geom_smooth(method = "lm", formula = y ~ poly(x, 2), color = "violet") +   # quadratic
   labs(title = "Average Rating vs Number of votes, linear and quadratic log number of votes",
        x = "Log(Number of Votes)", y = "Average Rating")
+print('Model 1,2 done')
 
 #Model 3 
 Model_3 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating, color = genre_family)) +
@@ -56,7 +57,7 @@ Model_3 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating, colo
   labs(title = "Rating vs Votes (logged) by Genre (Heavy versus Escapist)",
        x = "Log(Number of Votes)", y = "Average Rating") +
   facet_wrap(~ genre_family)
-print(Model_3)
+print('Model 3 done')
 
 
 #Model 4
@@ -66,10 +67,17 @@ Model_4 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating, colo
   labs(title = "Rating vs Votes (logged) by content type (movie vs serie)",
        x = "Log(Number of Votes)", y = "Average Rating") +
   facet_wrap(~ type)
-
+print('Model 4 done')
 
 print('Visualization of all models done')
 
   
 
-#NOTE, need codes for saving the respective plots
+# creating our gen/output folder
+dir.create("../../gen/output", recursive = TRUE, showWarnings = FALSE)
+
+# Save plots
+ggsave("../../gen/output/model1_2.png", Model_1_2, width = 8, height = 6)
+ggsave("../../gen/output/model3.png",   Model_3,   width = 8, height = 6)
+ggsave("../../gen/output/model4.png",   Model_4,   width = 8, height = 6)
+print('models saved in gen/output')

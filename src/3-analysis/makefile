@@ -3,21 +3,20 @@
 # Paths
 DATA_DIR = ../../data
 CLEAN_DIR = $(DATA_DIR)/clean
-OUTPUT_DIR = ../../output/analysis
+OUTPUT_DIR = ../../gen/output
 
 ANALYSIS_INPUT = $(CLEAN_DIR)/imdb_analysis.csv
 ANALYSIS_SCRIPT = analysis.R
 
-# Expected outputs (adjust if you save more plots/models)
+# Expected outputs
 PLOTS = $(OUTPUT_DIR)/model1_2.png \
         $(OUTPUT_DIR)/model3.png \
-        $(OUTPUT_DIR)/model4.png \
-        $(OUTPUT_DIR)/model5.png
+        $(OUTPUT_DIR)/model4.png
 
 # Default target
 all: $(PLOTS)
 
-# Run the analysis script to generate plots
+# Generate plots by running the analysis script
 $(PLOTS): $(ANALYSIS_SCRIPT) $(ANALYSIS_INPUT) | $(OUTPUT_DIR)
 	Rscript $(ANALYSIS_SCRIPT)
 
@@ -25,6 +24,6 @@ $(PLOTS): $(ANALYSIS_SCRIPT) $(ANALYSIS_INPUT) | $(OUTPUT_DIR)
 $(OUTPUT_DIR):
 	mkdir -p $(OUTPUT_DIR)
 
-# Clean generated outputs
+# Clean outputs
 clean:
 	rm -rf $(OUTPUT_DIR)
