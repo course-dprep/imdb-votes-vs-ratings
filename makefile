@@ -18,12 +18,12 @@ analysis: prep
 	$(MAKE) -C src/3-analysis
 
 # Step 4: reporting
-report: analysis
-	$(MAKE) -C src/4-reporting
+#report: analysis         (uncomment when reporting is done)
+#	$(MAKE) -C src/4-reporting         (uncomment when reporting is done)
 
 # Clean everything
 clean:
 	$(MAKE) -C src/1-raw-data clean
 	$(MAKE) -C src/2-data-preparation clean
 	$(MAKE) -C src/3-analysis clean
-	$(MAKE) -C src/4-reporting clean
+	# $(MAKE) -C src/4-reporting clean         (uncomment when reporting is done)
