@@ -30,13 +30,12 @@ For reproducibility and speed, a **sample of 200,000 rows** was downloaded from 
 The raw IMDb files were merged and then cleaned to produce an analytical dataset suitable for testing our research questions.  
 
 Key steps:  
-- Removed titles with fewer than **1,000 votes** (to ensure stable ratings).  
+- Merged the datasets on the common identifier tconst.  
 - Limited to the main content forms: **movies** (`movie`, `tvMovie`) and **series** (`tvSeries`, `tvMiniSeries`).  
 - Grouped genres into broader **families**:  
   - *Escapist*: Fantasy, Comedy, Romance, Action, Adventure, Animation, Family  
   - *Heavy*: Drama, Thriller, Biography, Crime, Documentary  
-  - *Gemixt*: titles spanning both groups  
-- Created a **final dataset** (`imdb_complete`) that combines ratings, votes, content form, and genre family.  
+- Created a **final dataset** (`imdb_enriched`) that combines ratings, votes, content form, and genre family.  
 - To address skew, the **log10 of vote counts** is used in visualizations and regressions.  
 
 ### Observations  
@@ -91,32 +90,63 @@ The repository is structured as follows:
 ```
 ├── .gitignore
 ├── .Rhistory 
-├── DESCRIPTION 
+├── .Rdata 
 ├── makefile 
 ├── README.md 
 ├── team-project-team5.Rproj 
 ├── data
-  └── download-data.R 
-├── reporting
-  ├── report.Rmd 
-  └── start_app.R 
-├── src
-  ├── analysis
-    └── analysis.R 
-  └── data-preparation
-    └── data-cleaning.R 
+│   └── .download.stamp
+├── gen
+│   └── output 
+│       ├── model1_2.png
+│       ├── model3.png
+│       └── model4.png
+└── src
+    ├── 1-raw-data
+    │   ├── download-data.R
+    │   ├── loading-packages.R
+    │   └── makefile
+    ├── 2-data-preparation
+    │   ├── Data-preparation.R
+    │   ├── Data_exploration.Rmd
+    │   ├── data-cleaning.R
+    │   └── makefile
+    ├── 3-analysis
+    │   ├── analysis.R
+    │   └── makefile
+    └── 4-reporting
+        ├── .RData
+        ├── .Rhistory
+        └── .gitignore
 ```
 
 ## Dependencies 
 This repository contains R scripts and resources for data analysis and visualisation. To ensure smooth execution, it depends on a set of packages, most of which are built-in libraries.
 
 External packages used
-- tidyverse ```install.packages("tidyverse")```<br>
-  Tidyverse is notably used for visualization (ggplot2) and data manipulation (dplyr)
+- `readr` — for reading delimited files
+- `tidyverse` — for general data manipulation and visualization
+- `dplyr` — for data wrangling and transformation
+- `tidyr` — for data tidying
+- `ggplot2` — for visualization
+- `here` — for managing file paths across environments
+- `vroom` — for fast data import
+- `broom` — for tidying model outputs
+- `ordinal` — for ordinal regression analysis
+
+To install all required functions, make use of the function install.packages(). 
+They can be loaded with the function library() or lapply()
+
 
 ## Running Instructions 
 
-*Provide step-by-step instructions that have to be followed to run this workflow.*
+Using the makefile:
+Type "make"" in the terminal to run the entire project. To check the changes that will be made beforehand, type "make -n".
+Every single makefile has an instruction at the first line how to run the single makefile for that folder, instead of the entire project.
+
+Sidenotes:
+- Make has to be installed to
+
 
 ## Resources
 - Hsu, P., Shen, Y., & Xie, X. (2014). Predicting Movies User Ratings with Imdb Attributes. In Lecture notes in computer science (pp. 444–453). https://doi.org/10.1007/978-3-319-11740-9_41 
