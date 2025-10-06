@@ -106,33 +106,25 @@ The repository is structured as follows:
 ├── README.md 
 ├── team-project-team5.Rproj 
 ├── data
-    ├── clean
-        ├── imdb_analysis.csv       
-        ├── imdb_clean.rds
-        ├── imdb_analysis.rds       
-        ├── imdb_enriched.csv
-        ├── imdb_clean.csv        
-        ├── imdb_enriched.rds
-    ├── title.ratings.tsv.gz
-    └── title.basics.tsv.gz
+│   └── clean
 ├── gen
-    └── output 
-        ├── model1_2.png
-        ├── model3.png
-        └── model4.png
+│   └── output 
+│       ├── model1_2.png
+│       ├── model3.png
+│       └── model4.png
 └── src
     ├── 1-raw-data
-        ├── download-data.R
-        ├── loading-packages.R
-        └── makefile
+    │   ├── download-data.R
+    │   ├── loading-packages.R
+    │   └── makefile
     ├── 2-data-preparation
-        ├── Data-preparation.R
-        ├── Data_exploration.Rmd
-        ├── data-cleaning.R
-        └── makefile
+    │   ├── Data-preparation.R
+    │   ├── Data_exploration.Rmd
+    │   ├── data-cleaning.R
+    │   └── makefile
     ├── 3-analysis
-        ├── analysis.R
-        └── makefile
+    │   ├── analysis.R
+    │   └── makefile
     └── 4-reporting
         ├── .RData
         ├── .Rhistory
