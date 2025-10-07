@@ -27,6 +27,10 @@ imdb_analysis <- imdb_analysis %>%
     TRUE ~ NA_character_
   ))
 
+#Keep only those observations with an exclusive genre
+imdb_analysis_main <- imdb_analysis_main %>%
+  filter(genre_family == "Escapist" | genre_family == "Heavy")
+
 #Create rating groups 
 "Instead of a continuous variable for ratings, we could test whether the rating category (very bad, average etc) would give insightful results, beside the regression with rating as a continuous variable. The reason is that because very often reviews are provided in number of stars on websites, and this might provide for a managerially relevant addition to the main analysis."
 imdb_analysis <- imdb_analysis %>%
