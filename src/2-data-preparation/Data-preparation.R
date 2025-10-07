@@ -28,7 +28,7 @@ imdb_analysis <- imdb_analysis %>%
   ))
 
 #Keep only those observations with an exclusive genre
-imdb_analysis_main <- imdb_analysis_main %>%
+imdb_analysis <- imdb_analysis %>%
   filter(genre_family == "Escapist" | genre_family == "Heavy")
 
 #Create rating groups 

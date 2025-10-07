@@ -1,5 +1,5 @@
 
-# Popularity vs. Quality: exploring the quadtric relationship between ratings and vote counts on IMDb
+# Votes vs Valence: exploring the quadratic relationship between ratings and vote counts on IMDb
 This study investigates the relationship between popularity (measured by the number of votes) and perceived quality (average IMDb rating) of films and series. Using IMDb data, the analysis examines whether highly rated titles also attract more votes, or whether popularity and quality diverge and it explores whether this relationship differs across genres and between movies and series (i.e. content form). 
 
 ## Motivation
