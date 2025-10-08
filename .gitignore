@@ -24,3 +24,7 @@ Thumbs.db
 .gz
 *.tsv.gz
 .tsv.gz
+
+# ignore images
+.png
+*.png
