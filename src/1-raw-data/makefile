@@ -1,5 +1,12 @@
 # Makefile for 1-raw-data, run in terminal with 'make raw' from project root
 
+# Cross-platform touch command
+ifeq ($(OS),Windows_NT)
+	TOUCH = type NUL >
+else
+	TOUCH = touch
+endif
+
 # Paths
 DATA_DIR = ../../data
 STAMP = $(DATA_DIR)/.download.stamp
