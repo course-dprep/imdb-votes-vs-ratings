@@ -156,8 +156,8 @@ As such, the U-shaped curve is steeper for heavy genres; i.e. polarization is mo
 The main curve (for movies) is U-shaped, but for series, these interactions flatten or even invert the curve.
 
 ![Rating vs. Votes (logged) by content type (Movie vs. Serie)](../../gen/output/model4.png)
-[Regression table]("../../gen/output/regression_models.md")
 
+![Regression analysus](../..gen/output/regression_models.png)
 
 
 # 7.Conclusion and Recommendations

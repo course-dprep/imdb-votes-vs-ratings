@@ -102,7 +102,7 @@ models <- list(
 
 modelsummary(
   models,
-  output = "../../gen/output/regression_models.md",
+  output = "../../gen/output/regression_models.png",
   title = "Regression Models: Ratings vs Votes",
   stars = TRUE
 )
