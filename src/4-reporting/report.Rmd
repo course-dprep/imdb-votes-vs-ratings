@@ -136,13 +136,17 @@ The coefficient for log_votes is negative and highly significant (β = –0.032,
 **Model 2 – Testing for nonlinearity (polarization effect).**
 This model shows that – as expected – that the relationship between ratings and votes is clearly non-linear: log_votes is negative (β = –0.56, p < .001) and log_votes² is positive (β = +0.042, p < .001). This combination indicates a U-shaped relationship between number of votes and ratings. At low-to-moderate numbers of votes, more votes are associated with lower ratings. At many votes, ratings start increasing again. Moreover, the model fit improves notably (R² = 0.026 vs 0.004 in Model 1) and the ANOVA test confirms that adding the quadratic term significantly improves fit (F(1, 256976) = 5707.8, p < .001).
 
+
 ![Average rating vs. number of votes, linear and quadratic log number of votes](../../gen/output/model1_2.png)
+
+htmltools::tags$iframe(src = "../../gen/output/regression_models.html", width = "100%", height = "600px")
 
 **Model 3 – Moderation by Genre Family.**
 The main effect of the heavy genre is positive (β = +0.59, p < .001): heavy, serious genres (drama, war, biography) tend to have higher ratings overall than escapist genres (comedy, action). The interaction terms are small yet significant:
 •	log_votes × genre_familyHeavy: negative (β = –0.056, p < .001)
 •	log_votes² × genre_familyHeavy: positive (β = +0.0049, p < .001)
 As such, the U-shaped curve is steeper for heavy genres; i.e. polarization is more pronounced for heavy titles.
+
 
 ![Rating vs. Votes (logged) by Genre (Heavy vs. Escapist)](../../gen/output/model3.png)
 
@@ -152,6 +156,9 @@ As such, the U-shaped curve is steeper for heavy genres; i.e. polarization is mo
 The main curve (for movies) is U-shaped, but for series, these interactions flatten or even invert the curve.
 
 ![Rating vs. Votes (logged) by content type (Movie vs. Serie)](../../gen/output/model4.png)
+[Regression table]("../../gen/output/regression_models.md")
+
+
 
 # 7.Conclusion and Recommendations
 The current study studied the the relationship between the number of votes and the average rating of movies on IMDb. Additionally, it explored whether this relationship between number of votes and average rating differed across movie genres (escapist (fantasy, comedy, romance) and heavy (drama, thriller)) and across movies and series (i.e. content form). Based on the results of the study, we conclude that from a simple linear analysis it appears that movies with more votes have a lower rating overall. However, adding a quadratic term for number of votes, we conclude that titles with very few or very many votes have higher ratings on average than those with a moderately number of votes.  — either high praise or sharp criticism — while moderately popular titles receive more average evaluations. 
