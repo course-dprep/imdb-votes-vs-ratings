@@ -1,6 +1,6 @@
 ---
-title: "Assignment DPREP Group 5"
-author: "Eveline Verhage"
+title: "IMDb Ratings vs. Votes"
+author: "Eveline Verhage, Eefje van der Sanden, Sanne van der Wiel, Jeroen Swolfs, Edwin van Zon"
 date: "`r Sys.Date()`"
 output:
   pdf_document:
@@ -12,5 +12,129 @@ geometry: margin=2.5cm
 fontsize: 11pt
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+### Setup ###
+# Loading Libraries
+library(dplyr)
+library(tidyverse)
+library(readr)
+library(here)
+library(tidyr)
+library(broom)
+library(vroom)
+library(ggplot2)
+library(ordinal)
+```
+
+# Research Motivation
+Our research question is:  
+*“How do the number of votes on IMDb relate to the average rating of movies and series, and how does this relationship differ across genre families (‘Escapist’ vs ‘Heavy’) and content types?” 
 
 
+This question is relevant because vote counts affect visibility and perceived credibility of ratings. Understanding these patterns can help streaming services and producers position content more effectively.
+
+# Data
+The datasets that were used were publucly downloaded IMDb datasets:
+
+- title.basics (title type, year, genres)
+
+- title.ratings (average rating, number of votes)
+
+# Data Preparation
+The raw IMDb files were merged and then cleaned to produce an analytical dataset suitable for testing our research questions.:
+
+- Casting startYear to integer.
+
+- Filtering only movies and series.
+
+- De-duplicating titles.
+
+- Dropping titles with <20 votes to reduce noise.
+
+- Mapping genres into two families: 
+    - Escapist: *Fantasy, Comedy, Romance, Action, Adventure, Animation, Family* 
+    - Heavy: *Drama, Thriller, Biography, Crime, Documentary*
+
+The following additional features were engineered:
+
+- votes2 = *squared votes*
+
+- log_votes & log_votes2 to address skewness.
+  - log_votes = *log₁₀(numVotes)*
+  - log_votes2 = *(log₁₀(numVotes))²*
+
+- period (*Pre-War, Interwar, Post-War, Modern*).
+
+- rating_category (*Very Bad, Bad, Average, Good, Excellent*).
+
+These steps yielded two clean datasets:
+
+- imdb_clean (base cleaning)
+
+- imdb_enriched (with genre family)
+
+- imdb_analysis (analysis-ready with transformations)
+
+# Analysis
+
+The analysis begins with a visual exploration of the data in R, where the distribution of ratings is examined across different vote counts. To account for the extreme skew in vote counts—since a few titles receive millions of votes while most receive very few—the votes variable is log-transformed.
+
+Next, the correlation between votes and ratings is calculated to provide a preliminary indication of their relationship. A very low correlation could suggest no relationship or a non-linear relationship.
+
+To formally test the relationship, a polynomial regression model is estimated with rating as the dependent variable and log(votes) and log(votes)2 as independent variables. This allows us to capture potential non-linear effects of vote counts on ratings.
+
+To explore potential moderating effects of genre, an interaction term between ratings and genre (categorized as escapist: fantasy, comedy, romance; and heavy: drama, thriller) is added to a separate regression model. Similarly, another model includes an interaction term between ratings and content form. Finally, a full model combines both interaction terms to assess whether including these moderators improves model fit.
+
+For each regression, visualizations are produced to illustrate the relationships and interaction effects, providing a clear, graphical interpretation of the results.
+
+
+With this method several models are estimated:
+
+| Model | DV | IVs | Purpose |
+|-------|----|-----|---------|
+| 1. Linear | averageRating | log_votes + period | Baseline effect |
+| 2. Quadratic | averageRating | log_votes + log_votes2 + period | Nonlinearity |
+| 3. Interaction Genre | averageRating | + genre_family interactions | Compare Escapist vs Heavy |
+| 4. Interaction Type | averageRating | + type interactions | Compare movies vs series |
+| 5. Logistic (Polr) | rating_category | log_votes + log_votes2 | Managerial relevance (categories) |
+
+The key visuals that come out of these models are:
+
+- Scatter + linear vs quadratic fits.
+
+- Separate plots by genre family and type.
+
+- Stacked bar of rating categories across log(votes).
+
+# Results & Managerial Insights
+- Ratings increase with more votes but at a diminishing rate (quadratic term significant).
+![Average rating vs. number of votes, linear and quadratic log number of votes](../../gen/output/model1_2.png)
+
+- Heavy genres show slightly lower average ratings at low vote counts but converge at high votes.
+![Rating vs. Votes (logged) by Genre (Heavy vs. Escapist)](../../gen/output/model3.png)
+
+- Movies and series show similar patterns, with series having slightly flatter curves.
+![Rating vs. Votes (logged) by content type (Movie vs. Serie)](../../gen/output/model4.png)
+
+- Logistic model indicates higher vote counts shift distribution towards “Good/Excellent” categories.
+
+These insights suggest that marketing efforts to boost early vote counts may improve perceived quality, especially for Heavy genres.
+
+# Conclusion
+
+# Reproducibility & Workflow
+- The entire pipeline is automated via relative paths and can be run with a single make command from the repository root.
+
+- All raw data is downloaded programmatically; generated files are written to data/clean.
+
+- .gitignore excludes generated files to keep version control clean.
+
+- The repository follows the recommended directory structure (src/1-raw-data, data/clean, analysis).
+
+- Multiple team members contributed via commits, pull requests, and GitHub Issues/Project Board, ensuring transparency.
+
+# Appendix
+- Session info
+
+- Extra regression tables
