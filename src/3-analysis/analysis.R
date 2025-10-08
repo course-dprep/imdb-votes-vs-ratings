@@ -4,10 +4,6 @@ source("../1-raw-data/loading-packages.R")
 #Load imdb dataset 
 imdb_analysis_main <- read_csv("../../data/clean/imdb_analysis.csv")
 
-#Keep only those observations with an exclusive genre
-imdb_analysis_main <- imdb_analysis_main %>%
-  filter(genre_family == "Escapist" | genre_family == "Heavy")
-
 #Model 1: regress rating (averageRating) on the log number of votes (log_votes), controlling for period
 model_linear <- lm(averageRating ~ log_votes + period, data = imdb_analysis_main)
 summary(model_linear)
@@ -70,8 +66,6 @@ Model_4 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating, colo
 print('Model 4 done')
 
 print('Visualization of all models done')
-
-  
 
 # creating our gen/output folder
 dir.create("../../gen/output", recursive = TRUE, showWarnings = FALSE)
