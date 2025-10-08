@@ -1,10 +1,4 @@
 # Makefile for 3-analysis, run in terminal with 'make analysis' from root
-# Cross-platform touch command
-ifeq ($(OS),Windows_NT)
-	TOUCH = type NUL >
-else
-	TOUCH = touch
-endif
 
 # Paths
 DATA_DIR = ../../data

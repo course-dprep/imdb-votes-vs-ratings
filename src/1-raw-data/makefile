@@ -1,12 +1,5 @@
 # Makefile for 1-raw-data, run in terminal with 'make raw' from project root
 
-# Cross-platform touch command
-ifeq ($(OS),Windows_NT)
-	TOUCH = type NUL >
-else
-	TOUCH = touch
-endif
-
 # Paths
 DATA_DIR = ../../data
 STAMP = $(DATA_DIR)/.download.stamp
@@ -19,16 +12,12 @@ all: $(STAMP)
 load-packages:
 	Rscript loading-packages.R
 
-# Ensure data directory exists
-$(DATA_DIR):
-	R -e "dir.create('$(DATA_DIR)', recursive = TRUE, showWarnings = FALSE)"
-
 # Download raw IMDb data and create samples
-$(STAMP): download-data.R loading-packages.R | $(DATA_DIR)
+$(STAMP): download-data.R loading-packages.R
 	Rscript download-data.R
 	R -e "file.create('$(STAMP)')"
 
 # Clean up downloaded data (optional: only run manually)
-clean:
-	R -e "if (file.exists('$(STAMP)')) file.remove('$(STAMP)')"
-	R -e "files <- list.files('$(DATA_DIR)', pattern='\\.tsv\\.gz$$', full.names=TRUE); if (length(files)>0) file.remove(files)"
+# clean:
+# 	R -e "if (file.exists('$(STAMP)')) file.remove('$(STAMP)')"
+# 	R -e "files <- list.files('$(DATA_DIR)', pattern='\\.tsv\\.gz$$', full.names=TRUE); if (length(files)>0) file.remove(files)"
