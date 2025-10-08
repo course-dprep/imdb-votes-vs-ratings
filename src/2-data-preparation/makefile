@@ -27,7 +27,7 @@ $(ANALYSIS_FILES): Data-preparation.R $(CLEAN_DIR)/imdb_enriched.csv | $(CLEAN_D
 
 # Ensure clean directory exists
 $(CLEAN_DIR):
-	mkdir -p $(CLEAN_DIR)
+	R -e "dir.create('$(CLEAN_DIR)', recursive = TRUE, showWarnings = FALSE)"
 
 # Clean outputs
 clean:

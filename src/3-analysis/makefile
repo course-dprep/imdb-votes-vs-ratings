@@ -22,8 +22,8 @@ $(PLOTS): $(ANALYSIS_SCRIPT) $(ANALYSIS_INPUT) | $(OUTPUT_DIR)
 
 # Ensure output directory exists
 $(OUTPUT_DIR):
-	mkdir -p $(OUTPUT_DIR)
+	Rscript -e "dir.create('$(OUTPUT_DIR)', recursive = TRUE, showWarnings = FALSE)"
 
 # Clean outputs
 clean:
-	rm -rf $(OUTPUT_DIR)
+	Rscript -e "unlink('$(OUTPUT_DIR)', recursive = TRUE, force = TRUE)"
