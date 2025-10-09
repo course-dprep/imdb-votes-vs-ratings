@@ -86,21 +86,33 @@ ggsave("../../gen/output/model3.png",   Model_3,   width = 8, height = 6)
 ggsave("../../gen/output/model4.png",   Model_4,   width = 8, height = 6)
 print('models saved in gen/output')
 
-# Save as png table
-dir.create(here("gen","output"), recursive = TRUE, showWarnings = FALSE)
+# Define output paths first
+dir.create(here("gen", "output"), recursive = TRUE, showWarnings = FALSE)
 
-html_path <- here("gen","output","regression_models.html")
-png_path  <- here("gen","output","regression_models.png")
+html_path <- here("gen", "output", "regression_models.html")
+png_path  <- here("gen", "output", "regression_models.png")
 
+# Create a list of models
+models <- list(
+  "Linear"             = model_linear,
+  "Quadratic"          = model_quadratic,
+  "Genre Interaction"  = model_interaction_genre,
+  "Type Interaction"   = model_interaction_type)
+
+# Create regression table and save as HTML
 modelsummary(
   models,
   output = html_path,
   title  = "Regression Models: Ratings vs Votes",
-  stars  = TRUE
-)
+  stars  = TRUE)
 
-# turn the HTML into a PNG
-if (!requireNamespace("webshot2", quietly = TRUE)) install.packages("webshot2")
-webshot2::webshot(html_path, file = png_path, vwidth = 1600, zoom = 1.5)
+# Convert the HTML file to PNG
+if (!requireNamespace("webshot2", quietly = TRUE)) {
+  install.packages("webshot2")}
 
+# Take screenshot of the HTML table
+webshot2::webshot(url  = html_path,
+  file = png_path,
+  vwidth = 1600,
+  zoom = 1.5)
 
