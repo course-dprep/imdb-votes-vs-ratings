@@ -32,8 +32,8 @@ The main preparation steps were:
 - Filtered to include only **movies** and **series**, excluding other title types.  
 - Removed titles with fewer than **20 votes** to avoid unreliable ratings.  
 - Grouped IMDb genres into two broader categories:
-  - *Escapist* (Fantasy, Comedy, Romance)
-  - *Heavy* (Drama, Thriller)
+  - **Escapist** (Fantasy, Comedy, Romance, Action, Adventure, Animation, Family)  
+  - **Heavy** (Drama, Thriller, Biography, Crime, Documentary)
 - Created transformed variables to address skewness and model non-linear effects:
   - `votes2` = numVotes²  
   - `log_votes` = log1p(numVotes)  
