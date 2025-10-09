@@ -24,3 +24,4 @@ Thumbs.db
 .gz
 *.tsv.gz
 .tsv.gz
+.RData

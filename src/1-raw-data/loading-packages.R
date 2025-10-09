@@ -9,7 +9,11 @@ packages <- c(
   "here",
   "vroom",
   "broom",
-  "ordinal"
+  "ordinal",
+  "webshot2",
+  "modelsummary",
+  "grid",
+  "gridExtra"
 )
 
 # Install any missing packages

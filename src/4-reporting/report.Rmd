@@ -13,32 +13,31 @@ fontsize: 11pt
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-### Setup ###
-# Loading Libraries
-library(dplyr)
-library(tidyverse)
-library(readr)
-library(here)
-library(tidyr)
-library(broom)
-library(vroom)
-library(ggplot2)
-library(ordinal)
+knitr::opts_chunk$set(
+  warning = FALSE, message = FALSE,
+  fig.align = "center", out.width = "100%"
+)
+
+suppressPackageStartupMessages({
+  if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+  library(here)
+})
+
+source(here::here("src","1-raw-data","loading-packages.R"))
 ```
 
+
 # 1.Introduction 
+The Internet Movie Database (IMDb) is one of the most widely used online platforms for film and television information, containing millions of titles along with user-generated ratings and vote counts. It serves as a valuable resource for studying audience preferences and perceptions of quality across a diverse range of genres and formats (Ramos et al., 2015). 
 
-The Internet Movie Database (IMDb) is one of the most widely used online platforms for film and television information, containing millions of titles along with user-generated ratings and vote counts. It serves as a valuable resource for studying audience preferences and perceptions of quality across a diverse range of genres and formats.
-
-This study investigates the relationship between popularity (measured by the number of votes) and perceived quality (average IMDb rating) of films and series. Using IMDb data, the analysis examines whether highly rated titles also attract more votes, or whether popularity and quality diverge. Furthermore, it explores whether this relationship differs across genres and between movies and series (i.e., content form).
+This study investigates the relationship between popularity (measured by the number of votes) and perceived quality (average IMDb rating) of films and series. Using IMDb data, the analysis examines whether highly rated titles also attract more votes, or whether popularity and quality diverge—an issue on which prior work finds that vote counts track visibility/prominence while average ratings need not covary with votes (Wasserman et al., 2015; Baugher & Ramos, 2017). Furthermore, it explores whether this relationship differs across genres and between movies and series (i.e., content form), acknowledging that some dynamics specific to TV series and episodic content have been documented (Gomes et al., 2022).
 
 # 2.Theoretical Framework and Research Motivation 
-The relationship between the number of votes and the average rating of movies provides valuable insights into audience behaviour and preferences. Understanding this relationship can inform film studios, reviewers, and marketing professionals about how viewers engage with content and express their opinions online.
+The relationship between the number of votes and the average rating of movies provides valuable insights into audience behaviour and preferences. Understanding this relationship can inform film studios, reviewers, and marketing professionals about how viewers engage with content and express their opinions online, especially given documented social-influence and herding processes in rating environments (Sunder et al., 2019).
 
-Based on prior research on the polarization effect - the tendency for individuals with strong positive or negative opinions to be more likely to share them - this study expects the relationship between the number of votes and average rating to be non-linear (quadratic) rather than linear. Two competing hypotheses are proposed regarding the shape of this relationship. First, both highly rated and poorly rated titles may attract more attention and engagement, as individuals with strong opinions are more likely to share them. This would produce a concave upward (U-shaped) relationship between rating and vote count. Conversely, widely viewed mainstream films might receive a high number of ratings that are relatively moderate, reflecting a broader audience appeal. This would result in a concave downward (inverted U-shaped) relationship.
+Based on prior research on the polarization effect—the tendency for individuals with strong positive or negative opinions to be more likely to share them—this study expects the relationship between the number of votes and average rating to be non-linear (quadratic) rather than linear. Large-scale evidence shows that online ratings often display polarized (J- or U-shaped) distributions due to “polarity self-selection,” where consumers with extreme evaluations are more likely to post (Schoenmueller et al., 2020), and technical work on ratings polarization explicitly characterizes U-shaped distributions in item ratings (Badami et al., 2017). Two competing hypotheses are therefore plausible. First, both highly rated and poorly rated titles may attract more attention and engagement, as individuals with strong opinions are more likely to share them—yielding a concave-upward (U-shaped) relation between rating and vote count (Badami et al., 2017; Schoenmueller et al., 2020). Conversely, widely viewed mainstream films might receive a high number of ratings that are relatively moderate, reflecting broader audience appeal, producing a concave-downward (inverted U-shaped) relation; this possibility is also consistent with research showing that volume (visibility) and valence (quality) can decouple (Wasserman et al., 2015; Sunder et al., 2019).
 
-Moreover, the relationship between ratings and number of votes Genres may attract distinct audience segments that vary in their rating behavior—mainstream genres might yield different rating distributions compared to niche ones. Likewise, differences between movies and series, such as viewing length and audience engagement patterns, could also influence the relationship between popularity and perceived quality. As such the analysis also controls for (1) differences in genre and (2) differences between movies and series.
+Moreover, the relationship between ratings and number of votes may vary across categories and content forms. Prior work suggests that visibility and voting dynamics can differ across platforms and contexts (Baugher & Ramos, 2017), that vote distributions show robust regularities with some genre- and budget-related exceptions (Ramos et al., 2015), and that TV series exhibit distinct rating determinants relative to films (Gomes et al., 2022). As such, the analysis controls for (1) differences in genre and (2) differences between movies and series.
 
 # 3.Research Question 
 The current project sets out to answer the following research question: *What is the relationship between the number of votes and the average rating of movies on IMDb?*
@@ -54,6 +53,11 @@ We programmatically downloaded two public IMDb datasets:
 • title.ratings (average rating, number of votes)
 
 Given the substantial size of the files and the need for a manageable data set for our analysis, we have selected a reduced sample of 200,000 observations from the IMDb data set. This sample size enables us to conduct thorough statistical analyses while ensuring efficiency. A seed was set at 123 to ensure that analysis is run with the same data.
+To give a glimpse of our raw data, we provide a table with basic descriptive statistics.
+kan ik dan niet gewoon hetzelfde doen als hier?:
+
+![Regression analysis](`r here::here("gen","output","basic_descriptives.png")`)
+
 
 ## 4.2.Data preparation 
 To ensure that the IMDb datasets were consistent and suitable for statistical analysis, the two source files (title.basics and title.ratings) were merged using the unique identifier tconst using inner-join. An inner join was chosen because it retains only titles that appear in both datasets (i.e., titles that have both descriptive information and user ratings).This approach ensures that every observation in the final dataset contains complete and relevant information for the analysis.
@@ -157,7 +161,7 @@ The main curve (for movies) is U-shaped, but for series, these interactions flat
 
 ![Rating vs. Votes (logged) by content type (Movie vs. Serie)](../../gen/output/model4.png)
 
-![Regression analysus](../..gen/output/regression_models.png)
+![Regression analysis](`r here::here("gen","output","regression_models.png")`)
 
 
 # 7.Conclusion and Recommendations
@@ -189,7 +193,11 @@ Additionally, our study does not account for temporal effects. Ratings may evolv
 
 - Multiple team members contributed via commits, pull requests, and GitHub Issues/Project Board, ensuring transparency.
 
-# Appendix
-- Session info
-
-- Extra regression tables
+# References
+Badami, M., Nasraoui, O., Sun, W., & Shafto, P. (2017). Detecting polarization in ratings: An automated pipeline and a preliminary quantification on several benchmark data sets. 2017 IEEE International Conference on Big Data (Big Data), 2682–2690. https://doi.org/10.1109/BigData.2017.8258231 researchwithrutgers.com
+Baugher, D., & Ramos, C. (2017). The cross-platform consistency of online user movie ratings. Atlantic Marketing Journal, 5(3), Article 9. https://digitalcommons.kennesaw.edu/amj/vol5/iss3/9/ activityinsight.pace.edu
+Gomes, A. L., Vianna, G., Escovedo, T., & Kalinowski, M. (2022). Predicting IMDb rating of TV series with deep learning: The case of Arrow. In Proceedings of the XVIII Brazilian Symposium on Information Systems (SBSI ’22). https://doi.org/10.1145/3535511.3535520 arXiv
+Ramos, M., Calvão, A. M., & Anteneodo, C. (2015). Statistical patterns in movie rating behavior. PLOS ONE, 10(8), e0136083. https://doi.org/10.1371/journal.pone.0136083 PLOS
+Schoenmueller, V., Netzer, O., & Stahl, F. (2020). The polarity of online reviews: Prevalence, drivers and implications. Journal of Marketing Research, 57(5), 853–877. https://doi.org/10.1177/0022243720941832 SAGE Journals
+Sunder, S., Kim, K. H., & Yorkston, E. A. (2019). What drives herding behavior in online ratings? The role of rater experience, product portfolio, and diverging opinions. Journal of Marketing, 83(6), 93–112. https://doi.org/10.1177/0022242919875688 researchwithrutgers.com
+Wasserman, M., Mukherjee, S., Scott, K., Zeng, X. H. T., Radicchi, F., & Amaral, L. A. N. (2015). Correlations between user voting data, budget, and box office for films in the Internet Movie Database. Journal of the Association for Information Science and Technology, 66(4), 858–868. https://doi.org/10.1002/asi.23213
