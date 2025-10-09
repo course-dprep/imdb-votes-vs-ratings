@@ -1,24 +1,6 @@
 ### OPTION 1
 # List of required packages
 print('start loading packages')
-<<<<<<< HEAD
-packages <- c(
-  "readr",
-  "tidyverse",
-  "dplyr",
-  "tidyr",
-  "ggplot2",
-  "here",
-  "vroom",
-  "broom",
-  "ordinal",
-  "webshot2",
-  "modelsummary",
-  "grid",
-  "gridExtra"
-)
-=======
->>>>>>> main
 
 library(readr)
 library(tidyverse)
@@ -29,6 +11,10 @@ library(here)
 library(vroom)
 library(broom)
 library(ordinal)
+library(webshot2)
+library(modelsummary)
+library(grid)
+library(gridExtra)
 
 
 print('packages loaded')
