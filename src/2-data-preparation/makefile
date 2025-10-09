@@ -27,5 +27,5 @@ $(ANALYSIS_FILES): Data-preparation.R $(CLEAN_DIR)/imdb_enriched.csv
 
 
 # Clean outputs
-# clean:
-# 	rm -f $(CLEAN_FILES) $(ANALYSIS_FILES)
+clean:
+	rm -f $(CLEAN_FILES) $(ANALYSIS_FILES)
