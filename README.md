@@ -50,13 +50,13 @@ These transformations were implemented in `src/2-clean-data/data-preparation.R` 
 The resulting **`imdb_analysis`** dataset serves as the input for the regression models in the analysis phase.
 
 ### Observations 
-The final dataset (`imdb_analysis`) includes **257,118 titles** in total:  
+The final dataset (`imdb_analysis`) includes **257,118** observations in total:  
 - **Movies:** 200,409  
 - **Series:** 56,709  
 
 By genre family:  
-- **Escapist:** 97,746 titles  
-- **Heavy:** 159,372 titles  
+- **Escapist:** 97,746 
+- **Heavy:** 159,372  
 
 Titles span from **1894 to 2026**, with an average release year around **2000**.  
 Ratings range between **1.0 and 9.9** (mean ≈ **6.3**), while vote counts vary from **20** to over **3 million**.  
