@@ -1,6 +1,9 @@
 print('start load dataset prep')
 # Load required packages
-source("../1-raw-data/loading-packages.R")
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+library(here)
+
+source(here("src", "1-raw-data", "loading-packages.R"))
 
 # Load imdb dataset
 imdb_analysis <- read_csv("../../data/clean/imdb_enriched.csv")

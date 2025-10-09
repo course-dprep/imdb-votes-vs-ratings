@@ -1,6 +1,10 @@
 print('starting download')
-# Load required packages (subfolder-relative; we run from src/1-raw-data/)
-source("loading-packages.R")
+# Load required packages 
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+library(here)
+
+source(here("src", "1-raw-data", "loading-packages.R"))
+
 
 # Data directory is the sibling folder ../../data
 data_dir <- "../../data"

@@ -1,7 +1,11 @@
 print('start importing data for clean')
 
 # Load packages (subfolder-relative)
-source("../1-raw-data/loading-packages.R")
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+library(here)
+
+source(here("src", "1-raw-data", "loading-packages.R"))
+
 
 # READ RAW DATA (from root-level data folder)
 basics  <- read_tsv("../../data/title.basics.tsv.gz",  na = "\\N",
@@ -12,6 +16,45 @@ ratings <- read_tsv("../../data/title.ratings.tsv.gz", na = "\\N",
                     col_select = c(tconst, averageRating, numVotes),
                     show_col_types = FALSE)
 print('imported data for clean')
+
+# creating basic statistics for the data we just downloaded
+out_png <- here::here("gen","output","basic_descriptives.png")
+dir.create(dirname(out_png), recursive = TRUE, showWarnings = FALSE)
+
+imdb <- dplyr::inner_join(basics, ratings, by = "tconst") |>
+  dplyr::mutate(startYear = suppressWarnings(as.numeric(startYear)))
+
+desc_num <- function(x) {
+  x <- x[!is.na(x)]
+  c(Obs = length(x), Mean = mean(x), `Std.Dev.` = stats::sd(x), Min = min(x), Max = max(x))
+}
+
+vars <- list(
+  startYear     = imdb$startYear,
+  averageRating = imdb$averageRating,
+  numVotes      = imdb$numVotes
+)
+
+desc <- dplyr::bind_rows(lapply(vars, desc_num), .id = "Variable")
+
+desc_fmt <- desc |>
+  dplyr::mutate(
+    Obs       = format(Obs, big.mark = ","),
+    Mean      = dplyr::if_else(Variable == "averageRating", sprintf("%.2f", Mean), sprintf("%.1f", Mean)),
+    `Std.Dev.`= dplyr::if_else(Variable == "averageRating", sprintf("%.2f", `Std.Dev.`), sprintf("%.1f", `Std.Dev.`)),
+    Min       = dplyr::if_else(Variable == "averageRating", sprintf("%.1f", Min), format(round(Min), big.mark=",")),
+    Max       = dplyr::if_else(Variable == "averageRating", sprintf("%.1f", Max), format(round(Max), big.mark=","))
+  )
+
+# save as PNG
+if (!requireNamespace("gridExtra", quietly = TRUE)) install.packages("gridExtra")
+g <- gridExtra::tableGrob(desc_fmt, rows = NULL)   # <- use desc_fmt here
+
+png(out_png, width = 1800, height = 600, res = 200)
+grid::grid.newpage()
+grid::grid.draw(g)
+dev.off()
+
 
 # TRANSFORMATION
 #Merge the datasets based on the common identifier (tconst)

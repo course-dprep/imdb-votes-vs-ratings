@@ -11,6 +11,10 @@ library(here)
 library(vroom)
 library(broom)
 library(ordinal)
+library(webshot2)
+library(modelsummary)
+library(grid)
+library(gridExtra)
 
 
 print('packages loaded')
