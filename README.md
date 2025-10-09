@@ -49,11 +49,23 @@ These transformations were implemented in `src/2-clean-data/data-preparation.R` 
 
 The resulting **`imdb_analysis`** dataset serves as the input for the regression models in the analysis phase.
 
-### Observations - do if i can run the whole model
+### Observations 
+The final dataset (`imdb_analysis`) includes **257,118 titles** in total:  
+- **Movies:** 200,409  
+- **Series:** 56,709  
+
+By genre family:  
+- **Escapist:** 97,746 titles  
+- **Heavy:** 159,372 titles  
+
+Titles span from **1894 to 2026**, with an average release year around **2000**.  
+Ratings range between **1.0 and 9.9** (mean ≈ **6.3**), while vote counts vary from **20** to over **3 million**.  
+
+This broad and balanced dataset provides a solid foundation for analyzing the non-linear relationships between popularity and quality across genres and content forms.
 
 ### Variables in Final Dataset (`imdb_analysis`)
 
-| Variable           | Description                                         | Type             | Notes |
+| Variable           | Description                                         | Data Class       | Notes |
 |--------------------|-----------------------------------------------------|------------------|-------|
 | `tconst`           | IMDb unique identifier                              | Character        | Used for merging datasets |
 | `titleType`        | Original IMDb title type                            | Character        | e.g. `movie`, `tvSeries` |
@@ -106,21 +118,33 @@ All models and visualizations are generated automatically and exported to the `g
 
 These findings contribute to a better understanding of **audience behaviour** and **online rating dynamics**. They offer practical insights for **film studios**, **streaming platforms**, and **review aggregators** in interpreting consumer feedback and tailoring strategies to specific genres or content types.
 
-## Repository Overview - not sure if we need to include gen or not, so do we include the overview after you runned it on your pc or how it looks in our repository
+## Repository Overview 
 
 The repository is structured as follows: 
 ```
 ├── .gitignore
-├── .Rhistory 
-├── makefile 
-├── README.md 
+├── .RData
+├── .Rhistory
+├── makefile
+├── README.md
 ├── data
+│   ├── title.basics.tsv.gz
+│   ├── title.ratings.tsv.gz
 │   └── clean
+│       ├── imdb_clean.csv
+│       ├── imdb_clean.rds
+│       ├── imdb_enriched.csv
+│       ├── imdb_enriched.rds
+│       ├── imdb_analysis.csv
+│       └── imdb_analysis.rds
 ├── gen
-│   └── output 
+│   └── output
+│       ├── basic_descriptives.png
 │       ├── model1_2.png
 │       ├── model3.png
-│       └── model4.png
+│       ├── model4.png
+│       ├── regression_models.html
+│       └── regression_models.png
 └── src
     ├── 1-raw-data
     │   ├── download-data.R
@@ -128,8 +152,8 @@ The repository is structured as follows:
     │   ├── loading-packages.R
     │   └── makefile
     ├── 2-data-preparation
-    │   ├── Data-preparation.R
-    │   ├── Data_exploration.Rmd
+    │   ├── data-preparation.R
+    │   ├── data-exploration.Rmd
     │   ├── data-cleaning.R
     │   └── makefile
     ├── 3-analysis
@@ -183,7 +207,7 @@ The final report (`report.html` / `report.pdf`) is generated automatically in th
 - Ramos, M., Calvão, A. M., & Anteneodo, C. (2015). Statistical patterns in movie rating behavior. PLOS ONE, 10(8), e0136083. https://doi.org/10.1371/journal.pone.0136083 PLOS
 - Schoenmueller, V., Netzer, O., & Stahl, F. (2020). The polarity of online reviews: Prevalence, drivers and implications. Journal of Marketing Research, 57(5), 853–877. https://doi.org/10.1177/0022243720941832 SAGE Journals
 - Sunder, S., Kim, K. H., & Yorkston, E. A. (2019). What drives herding behavior in online ratings? The role of rater experience, product portfolio, and diverging opinions. Journal of Marketing, 83(6), 93–112. https://doi.org/10.1177/0022242919875688 researchwithrutgers.com
--  Wasserman, M., Mukherjee, S., Scott, K., Zeng, X. H. T., Radicchi, F., & Amaral, L. A. N. (2015). Correlations between user voting data, budget, and box office for films in the Internet Movie Database. Journal of the Association for Information Science and Technology, 66(4), 858–868. https://doi.org/10.1002/asi.23213
+- Wasserman, M., Mukherjee, S., Scott, K., Zeng, X. H. T., Radicchi, F., & Amaral, L. A. N. (2015). Correlations between user voting data, budget, and box office for films in the Internet Movie Database. Journal of the Association for Information Science and Technology, 66(4), 858–868. https://doi.org/10.1002/asi.23213
 
 ## Authors
 This project is set up as part of the Master's course [Data Preparation & Workflow Management](https://dprep.hannesdatta.com/) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu/), the Netherlands.
