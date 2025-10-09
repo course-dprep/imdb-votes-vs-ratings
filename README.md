@@ -12,9 +12,7 @@ Building on prior research on the **polarization effect**, this study expects th
 1. **Polarization hypothesis:** Both highly rated and poorly rated titles may attract more votes, as individuals with strong opinions are more likely to share them. This would produce a **U-shaped** relationship between votes and ratings.  
 2. **Mainstream hypothesis:** Widely viewed titles may receive a high number of votes with more moderate ratings, reflecting broad appeal but less extreme opinions. This would result in an **inverted U-shaped** relationship.
 
-The analysis controls for two moderating factors that could influence this relationship:  
-- Differences between **genres** (e.g., escapist vs. heavy content), and  
-- Differences between **content forms** (**movies vs. series**).
+The analysis controls for two moderating factors that could influence this relationship: differences between **genres** (e.g., escapist vs. heavy content), and differences between **content forms** (**movies vs. series**).
 
 ## Data
 
@@ -93,9 +91,10 @@ Model comparisons (via ANOVA and adjusted R²) assess whether including non-line
 Each model’s results are supported by visualizations, allowing a clear interpretation of linearity, curvature, and moderation effects.
 
 ## Preview of Findings
+The analyses reveal the following:
+- An clear **non-linear (quadratic)** relationship between the number of votes and IMDb ratings.  
+- Titles with very few or very many votes tend to have **higher ratings on average**, while moderately popular titles receive more balanced evaluations.  
 
-The analyses reveal a clear **non-linear (quadratic)** relationship between the number of votes and IMDb ratings.  
-Titles with very few or very many votes tend to have **higher ratings on average**, while moderately popular titles receive more balanced evaluations.  
 This pattern supports the **polarization hypothesis**: strong opinions drive engagement at both ends of the quality spectrum.
 
 Further, the results show that the relationship differs by both **genre** and **content form**.  
@@ -105,8 +104,7 @@ Further, the results show that the relationship differs by both **genre** and **
 
 All models and visualizations are generated automatically and exported to the `gen/output/` directory, enabling full **reproducibility** and transparent interpretation of the results.
 
-These findings contribute to a better understanding of **audience behaviour** and **online rating dynamics**.  
-They offer practical insights for **film studios**, **streaming platforms**, and **review aggregators** in interpreting consumer feedback and tailoring strategies to specific genres or content types.
+These findings contribute to a better understanding of **audience behaviour** and **online rating dynamics**. They offer practical insights for **film studios**, **streaming platforms**, and **review aggregators** in interpreting consumer feedback and tailoring strategies to specific genres or content types.
 
 ## Repository Overview - not sure if we need to include gen or not, so do we include the overview after you runned it on your pc or how it looks in our repository
 
@@ -152,9 +150,7 @@ Please make sure the install the following:
 - **Make** – Installation guide: [here](https://tilburgsciencehub.com/building-blocks/configure-your-computer/automation/make/)  
 - **R** – Installation guide: [here](https://tilburgsciencehub.com/building-blocks/configure-your-computer/setup/software/r/)  
 
-Before running the project with `make`, you must first install all required R packages.
-
-Run the following command once in your terminal:
+Before running the project with `make`, you must first install all required R packages.You can do this by running this following command in your terminal once:
 ```bash
 Rscript src/1-raw-data/installing_packages_DIY.R
 ```
