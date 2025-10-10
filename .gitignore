@@ -32,3 +32,9 @@ Thumbs.db
 # ignore html
 .html
 *.html
+
+# ignore log and tex
+.log
+*.log
+.tex
+*.tex

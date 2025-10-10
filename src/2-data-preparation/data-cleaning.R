@@ -1,11 +1,9 @@
-print('start importing data for clean')
+# data-cleaning is meant to clean the data, preparing it for the analysis
+message('start cleaning process...')
 
 # Load packages (subfolder-relative)
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 library(here)
-
 source(here("src", "1-raw-data", "loading-packages.R"))
-
 
 # READ RAW DATA (from root-level data folder)
 basics  <- read_tsv("../../data/title.basics.tsv.gz",  na = "\\N",
@@ -15,7 +13,6 @@ basics  <- read_tsv("../../data/title.basics.tsv.gz",  na = "\\N",
 ratings <- read_tsv("../../data/title.ratings.tsv.gz", na = "\\N",
                     col_select = c(tconst, averageRating, numVotes),
                     show_col_types = FALSE)
-print('imported data for clean')
 
 # creating basic statistics for the data we just downloaded
 out_png <- here::here("gen","output","basic_descriptives.png")
@@ -47,14 +44,12 @@ desc_fmt <- desc |>
   )
 
 # save as PNG
-if (!requireNamespace("gridExtra", quietly = TRUE)) install.packages("gridExtra")
 g <- gridExtra::tableGrob(desc_fmt, rows = NULL)   # <- use desc_fmt here
 
 png(out_png, width = 1800, height = 600, res = 200)
 grid::grid.newpage()
 grid::grid.draw(g)
 dev.off()
-
 
 # TRANSFORMATION
 #Merge the datasets based on the common identifier (tconst)
@@ -131,4 +126,5 @@ write_rds(imdb_clean,    "../../data/clean/imdb_clean.rds")
 
 write_csv(imdb_enriched, "../../data/clean/imdb_enriched.csv")
 write_rds(imdb_enriched, "../../data/clean/imdb_enriched.rds")
-print('output added to data/clean')
+
+message('data-cleaning completed')

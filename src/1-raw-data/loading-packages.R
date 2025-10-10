@@ -1,6 +1,5 @@
-### OPTION 1
-# List of required packages
-print('start loading packages')
+# List of required packages which will be loaded in
+message('start loading packages...')
 
 library(readr)
 library(tidyverse)
@@ -17,5 +16,5 @@ library(grid)
 library(gridExtra)
 
 
-print('packages loaded')
+message('packages loaded')
 
