@@ -18,17 +18,14 @@ RAW_STAMP = $(DATA_DIR)/.download.stamp
 all: $(CLEAN_FILES) $(ANALYSIS_FILES)
 
 # Step 1: Run data cleaning (requires raw download stamp)
-$(CLEAN_FILES): Data-cleaning.R $(RAW_STAMP) | $(CLEAN_DIR)
+$(CLEAN_FILES): Data-cleaning.R $(RAW_STAMP)
 	Rscript Data-cleaning.R
 
 # Step 2: Run data preparation (requires enriched data from cleaning)
-$(ANALYSIS_FILES): Data-preparation.R $(CLEAN_DIR)/imdb_enriched.csv | $(CLEAN_DIR)
+$(ANALYSIS_FILES): Data-preparation.R $(CLEAN_DIR)/imdb_enriched.csv
 	Rscript Data-preparation.R
 
-# Ensure clean directory exists
-$(CLEAN_DIR):
-	mkdir -p $(CLEAN_DIR)
 
 # Clean outputs
-clean:
-	rm -f $(CLEAN_FILES) $(ANALYSIS_FILES)
+# clean:
+# 	rm -f $(CLEAN_FILES) $(ANALYSIS_FILES)

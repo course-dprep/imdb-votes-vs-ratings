@@ -1,7 +1,6 @@
 
-# Votes vs Valence: Exploring the Quadratic Relationship Between Ratings and Vote Counts on IMDb
-
-This study examines the relationship between **popularity** (measured by the number of votes) and **perceived quality** (average IMDb rating) of films and series. Using IMDb data, the analysis investigates whether highly rated titles also attract more votes, or whether popularity and quality diverge. In addition, the study explores whether this relationship differs across **genres** and between **movies and series** (content form), as prior work suggests that engagement and evaluation dynamics may vary across these categories.
+# Votes vs Valence: exploring the quadratic relationship between ratings and vote counts on IMDb
+This study investigates the relationship between popularity (measured by the number of votes) and perceived quality (average IMDb rating) of films and series. Using IMDb data, the analysis examines whether highly rated titles also attract more votes, or whether popularity and quality diverge and it explores whether this relationship differs across genres and between movies and series (i.e. content form). 
 
 ## Motivation
 
@@ -22,65 +21,64 @@ We use two publicly available **IMDb datasets** ([IMDb Interfaces](https://www.i
 - **`title.basics.tsv.gz`** — metadata on titles (type, release year, genres)  
 - **`title.ratings.tsv.gz`** — user ratings and vote counts  
 
-To keep the dataset manageable, a **random sample of 200,000 titles** was selected using a fixed seed (`set.seed(123)`) for reproducibility.  
-The two datasets were merged via the unique identifier **`tconst`**, ensuring that each title contained both descriptive and rating information.
+For reproducibility and speed, a **sample of 200,000 rows** was downloaded from each file and merged via the unique identifier **`tconst`**.  
+Sampling was performed with a fixed seed (`set.seed(123)`) to ensure the same subset of data is used when the pipeline is re-run.  
 
-### Cleaning and Preparation
-The merged dataset was processed in R to produce a clean, analysis-ready dataset.  
-The main preparation steps were:
+### Cleaning & Preparation
+The raw IMDb files were merged and then cleaned to produce an analytical dataset suitable for testing our research questions.  
 
-- Filtered to include only **movies** and **series**, excluding other title types.  
-- Removed titles with fewer than **20 votes** to avoid unreliable ratings.  
-- Grouped IMDb genres into two broader categories:
-  - **Escapist** (Fantasy, Comedy, Romance, Action, Adventure, Animation, Family)  
-  - **Heavy** (Drama, Thriller, Biography, Crime, Documentary)
-- Created transformed variables to address skewness and model non-linear effects:
+Key steps:  
+- Merged the datasets on the common identifier tconst.  
+- Removed titles with fewer than **20 votes** (to ensure stable and representative ratings).  
+- Limited to the main content forms: **movies** (`movie`, `tvMovie`) and **series** (`tvSeries`, `tvMiniSeries`).  
+- Grouped genres into broader **families**:  
+  - *Escapist*: Fantasy, Comedy, Romance, Action, Adventure, Animation, Family  
+  - *Heavy*: Drama, Thriller, Biography, Crime, Documentary  
+- Created a **final dataset** (`imdb_enriched`) that combines ratings, votes, content form, and genre family.  
+- To address skew, the **log10 of vote counts** is used in visualizations and regressions.  
+  - *Mixed*: titles spanning both groups  
+- Created **transformed vote variables** to account for skew and non-linearity:  
   - `votes2` = numVotes²  
-  - `log_votes` = log1p(numVotes)  
-  - `log_votes2` = (log_votes)²
-- Added time-based and categorical controls:
-  - `period` = Pre-War / Interwar / Post-War / Modern (based on release year)  
-  - `rating_category` = Very Bad / Bad / Average / Good / Excellent (ordinal factor)
+  - `log_votes` = log₁₀(numVotes)  
+  - `log_votes2` = (log₁₀(numVotes))²  
+- Added **period categories** (*Pre-War*, *Interwar*, *Post-War*, *Modern*) based on release year.  
+- Added **rating categories** (*Very Bad*, *Bad*, *Average*, *Good*, *Excellent*) for potential ordinal analysis.  
+- Produced a **final dataset** (`imdb_analysis`) combining ratings, votes, content form, period, and genre family.  
 
-These transformations were implemented in `src/2-clean-data/data-preparation.R` and output as:
+### Observations
+From the current run (200k IMDb sample):  
 
-- `data/clean/imdb_analysis.csv`  
-- `data/clean/imdb_analysis.rds`
+- **All titles with ≥ 20 votes**: 367,691  
+- **After restricting to main content forms**: 367,691  
+- **Final dataset (`imdb_analysis`)**: 367,691  
 
-The resulting **`imdb_analysis`** dataset serves as the input for the regression models in the analysis phase.
-
-### Observations 
-The final dataset (`imdb_analysis`) includes **257,118** observations in total:  
-- **Movies:** 200,409  
-- **Series:** 56,709  
-
-By genre family:  
-- **Escapist:** 97,746 
-- **Heavy:** 159,372  
-
-Titles span from **1894 to 2026**, with an average release year around **2000**.  
-Ratings range between **1.0 and 9.9** (mean ≈ **6.3**), while vote counts vary from **20** to over **3 million**.  
-
-This broad and balanced dataset provides a solid foundation for analyzing the non-linear relationships between popularity and quality across genres and content forms.
+Breakdown:  
+- **Movies**: ~312,000  
+- **Series**: ~55,000  
+- **By genre family (across movies & series)**:  
+  - Escapist → 4,822  
+  - Heavy → 5,408  
+  - Mixed → 6,932  
 
 ### Variables in Final Dataset (`imdb_analysis`)
 
-| Variable           | Description                                         | Data Class       | Notes |
-|--------------------|-----------------------------------------------------|------------------|-------|
-| `tconst`           | IMDb unique identifier                              | Character        | Used for merging datasets |
-| `titleType`        | Original IMDb title type                            | Character        | e.g. `movie`, `tvSeries` |
-| `type`             | Recoded content form                                | Character        | *movie* or *series* |
-| `startYear`        | Release year                                        | Numeric / Integer| Used for period classification |
-| `genres`           | Original IMDb genre labels                          | Character        | Source for `genre_family` |
-| `genre_family`     | Simplified genre grouping                           | Character        | *Escapist* or *Heavy* |
-| `averageRating`    | IMDb average user rating (1–10)                     | Numeric / Double | Measure of perceived quality |
-| `numVotes`         | Number of IMDb votes                                | Numeric / Integer| Measure of popularity |
-| `votes2`           | Squared number of votes                             | Numeric / Double | Captures non-linear effects |
-| `log_votes`        | Log-transformed vote count                          | Numeric / Double | Reduces skew |
-| `log_votes2`       | Squared log-transformed vote count                  | Numeric / Double | Captures curvature |
-| `period`           | Historical period of release                        | Character        | *Pre-War*, *Interwar*, *Post-War*, *Modern* |
-| `rating_category`  | Ordinal rating category                             | Ordered Factor   | *Very Bad* → *Excellent* |
+| Variable           | Description                       | Type        | Notes |
+|--------------------|-----------------------------------|-------------|-------|
+| `tconst`           | IMDb unique identifier             | Character   | Used for joins |
+| `titleType`        | Original IMDb title type           | Character   | e.g. `movie`, `tvSeries` |
+| `type`             | Content form                       | Character   | Recoded: *movie* vs *series* |
+| `startYear`        | Release year                       | Numeric     | Used for descriptives and period grouping |
+| `genres`           | Original genre labels              | Character   | Source for `genre_family` |
+| `genre_family`     | Broad genre grouping               | Character   | *Escapist*, *Heavy*, *Mixed* |
+| `averageRating`    | IMDb mean user rating (1–10)       | Numeric     | Per-title perceived quality |
+| `numVotes`         | Number of IMDb votes               | Numeric     | Popularity measure |
+| `votes2`           | Squared number of votes            | Numeric     | Captures nonlinear scale effects |
+| `log_votes`        | Log-transformed vote counts        | Numeric     | Reduces skew |
+| `log_votes2`       | Squared log of votes               | Numeric     | Captures curvature |
+| `period`           | Historical period                  | Character   | *Pre-War*, *Interwar*, *Post-War*, *Modern* |
+| `rating_category`  | Rating category                    | Character   | *Very Bad → Excellent* (factor structure lost in CSV export) |
 
+---
 ## Method
 
 The analysis was conducted entirely in **R**, following a structured and automated workflow.  
@@ -122,49 +120,43 @@ These findings contribute to a better understanding of **audience behaviour** an
 
 The repository is structured as follows: 
 ```
-├── .gitignore
+imdb-votes-vs-ratings/
+├── makefile                     
+├── README.md                    
+├── .gitignore                   
 ├── .RData
-├── .Rhistory
-├── makefile
-├── README.md
-├── data
-│   ├── title.basics.tsv.gz
-│   ├── title.ratings.tsv.gz
-│   └── clean
-│       ├── imdb_clean.csv
-│       ├── imdb_clean.rds
-│       ├── imdb_enriched.csv
-│       ├── imdb_enriched.rds
-│       ├── imdb_analysis.csv
-│       └── imdb_analysis.rds
-├── gen
-│   └── output
-│       ├── basic_descriptives.png
-│       ├── model1_2.png
-│       ├── model3.png
-│       ├── model4.png
-│       ├── regression_models.html
-│       └── regression_models.png
-└── src
-    ├── 1-raw-data
-    │   ├── download-data.R
-    │   ├── installing_packages_DIY.R
-    │   ├── loading-packages.R
-    │   └── makefile
-    ├── 2-data-preparation
-    │   ├── data-preparation.R
-    │   ├── data-exploration.Rmd
-    │   ├── data-cleaning.R
-    │   └── makefile
-    ├── 3-analysis
-    │   ├── analysis.R
-    │   └── makefile
-    └── 4-reporting
-        ├── report.Rmd
-        ├── report.log
-        ├── report.tex
-        ├── start_app.R
-        └── makefile
+├── .Rhistory            
+├── data/                       
+   ├── .download.stamp          
+   └── clean/                  
+       ├── imdb_clean.csv
+       ├── imdb_clean.rds
+       ├── imdb_enriched.csv
+       ├── imdb_enriched.rds
+       ├── imdb_analysis.csv
+       └── imdb_analysis.rds
+├── gen/                         
+   └── output/
+       ├── model1_2.png
+       ├── model3.png
+       └── model4.png
+├── src/                         
+   ├── 1-raw-data/             
+       ├── download-data.R
+       ├── loading-packages.R
+       └── makefile
+   ├── 2-data-preparation/     
+       ├── data-cleaning.R
+       ├── Data-preparation.R
+       ├── Data_exploration.Rmd
+       └── makefile
+   ├── 3-analysis/             
+       ├── analysis.R
+       └── makefile
+   └── 4-reporting/             
+       ├── report.Rmd
+       ├── start_app.R
+       └── makefile
 ```
 
 ## Running Instructions

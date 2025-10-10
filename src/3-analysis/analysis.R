@@ -1,12 +1,12 @@
 #Load required packages
-source("../1-raw-data/loading-packages.R")
+if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+library(here)
+
+source(here("src", "1-raw-data", "loading-packages.R"))
+
 
 #Load imdb dataset 
 imdb_analysis_main <- read_csv("../../data/clean/imdb_analysis.csv")
-
-#Keep only those observations with an exclusive genre
-imdb_analysis_main <- imdb_analysis_main %>%
-  filter(genre_family == "Escapist" | genre_family == "Heavy")
 
 #Model 1: regress rating (averageRating) on the log number of votes (log_votes), controlling for period
 model_linear <- lm(averageRating ~ log_votes + period, data = imdb_analysis_main)
@@ -50,28 +50,32 @@ Model_1_2 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
        x = "Log(Number of Votes)", y = "Average Rating")
 print('Model 1,2 done')
 
-#Model 3 
-Model_3 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating, color = genre_family)) +
-  geom_point(alpha = 0.1) +
-  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE) +
+# Model 3 
+Model_3 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
+  geom_point(alpha = 0.1, color = "gray50") +  
+  geom_smooth(aes(color = genre_family),       
+              method = "lm", formula = y ~ poly(x, 2), se = FALSE, size = 1) +
   labs(title = "Rating vs Votes (logged) by Genre (Heavy versus Escapist)",
-       x = "Log(Number of Votes)", y = "Average Rating") +
-  facet_wrap(~ genre_family)
+       x = "Log(Number of Votes)", y = "Average Rating",
+       color = "Genre") +
+  facet_wrap(~ genre_family) +
+  theme_minimal()
 print('Model 3 done')
 
 
-#Model 4
-Model_4 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating, color = type)) +
-  geom_point(alpha = 0.1) +
-  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE) +
-  labs(title = "Rating vs Votes (logged) by content type (movie vs serie)",
-       x = "Log(Number of Votes)", y = "Average Rating") +
-  facet_wrap(~ type)
+# Model 4
+Model_4 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
+  geom_point(alpha = 0.1, color = "gray50") +  
+  geom_smooth(aes(color = type),               
+              method = "lm", formula = y ~ poly(x, 2), se = FALSE, size = 1) +
+  labs(title = "Rating vs Votes (logged) by Content Type (Movie vs Series)",
+       x = "Log(Number of Votes)", y = "Average Rating",
+       color = "Content Type") +
+  facet_wrap(~ type) +
+  theme_minimal()
 print('Model 4 done')
 
 print('Visualization of all models done')
-
-  
 
 # creating our gen/output folder
 dir.create("../../gen/output", recursive = TRUE, showWarnings = FALSE)
@@ -81,3 +85,34 @@ ggsave("../../gen/output/model1_2.png", Model_1_2, width = 8, height = 6)
 ggsave("../../gen/output/model3.png",   Model_3,   width = 8, height = 6)
 ggsave("../../gen/output/model4.png",   Model_4,   width = 8, height = 6)
 print('models saved in gen/output')
+
+# Define output paths first
+dir.create(here("gen", "output"), recursive = TRUE, showWarnings = FALSE)
+
+html_path <- here("gen", "output", "regression_models.html")
+png_path  <- here("gen", "output", "regression_models.png")
+
+# Create a list of models
+models <- list(
+  "Linear"             = model_linear,
+  "Quadratic"          = model_quadratic,
+  "Genre Interaction"  = model_interaction_genre,
+  "Type Interaction"   = model_interaction_type)
+
+# Create regression table and save as HTML
+modelsummary(
+  models,
+  output = html_path,
+  title  = "Regression Models: Ratings vs Votes",
+  stars  = TRUE)
+
+# Convert the HTML file to PNG
+if (!requireNamespace("webshot2", quietly = TRUE)) {
+  install.packages("webshot2")}
+
+# Take screenshot of the HTML table
+webshot2::webshot(url  = html_path,
+  file = png_path,
+  vwidth = 1600,
+  zoom = 1.5)
+
