@@ -4,22 +4,19 @@ This study investigates the relationship between popularity (measured by the num
 
 ## Motivation
 
-The relationship between the number of votes and the average rating of movies could give an interesting insight into audience behavior and preferences. By researching the relationship between number of votes and average rating, knowledge is gained that is valuable for film studios, reviewers and marketing professionals in the entertainment industry.
+The relationship between the number of votes and the average rating provides important insight into **audience behaviour** and **viewing preferences**. Understanding this connection helps to interpret online rating patterns and audience engagement on platforms such as IMDb. It also offers practical implications for filmmakers, distributors, and streaming services in understanding how users respond to different types of content.
 
-Due to prior research on the polarization effect, the expectation is that there is not a linear relationship between the number of votes and the average rating of movies but a quadratic one. There are two competing hypotheses on the shape of this non-linear (quadratic) relationship. First, it could be that very popular (i.e. high rating) and very non-popular (i.e. low rating) content is reviewed more often because strong opinions might be expressed more often. This would create a concave up relationship between rating and vote count. On the other hand, it could be that more mainstream movies which are watched very often, receive also many ratings which are all quite average because it appeals to a large mass. This would be the case of a concave down relationship.
+Building on prior research on the **polarization effect**, this study expects that the relationship between popularity and quality is **non-linear (quadratic)** rather than linear. Two main hypotheses are considered:
 
-The relationship is controlled for 1) the difference in genre, and 2) the difference between movies and series. Different genres can attract different audiences which could have a different behavior towards giving ratings. A very wide spread popular movie could be rated very different than a very niche genre for a specific audience. The difference between movies and series can lead to different outcomes because the length and setting in which people view those two can vary.
+1. **Polarization hypothesis:** Both highly rated and poorly rated titles may attract more votes, as individuals with strong opinions are more likely to share them. This would produce a **U-shaped** relationship between votes and ratings.  
+2. **Mainstream hypothesis:** Widely viewed titles may receive a high number of votes with more moderate ratings, reflecting broad appeal but less extreme opinions. This would result in an **inverted U-shaped** relationship.
 
-The suitable research question follows: 
-What is the relationship between the number of votes and the average rating of movies on IMDb?
-Sub questions: 
-  1. Does the relationship between number of votes and average rating differ across movie genres (escapist (fantasy, comedy, romance) and heavy (drama, thriller))?
-  2. Does the relationship between number of votes and average rating differ across movies and series (i.e. content form)?
+The analysis controls for two moderating factors that could influence this relationship: differences between **genres** (e.g., escapist vs. heavy content), and differences between **content forms** (**movies vs. series**).
 
 ## Data
 
 ### Sources
-We use two official **IMDb datasets** ([IMDb Interfaces](https://www.imdb.com/interfaces/)):
+We use two publicly available **IMDb datasets** ([IMDb Interfaces](https://www.imdb.com/interfaces/)):
 
 - **`title.basics.tsv.gz`** — metadata on titles (type, release year, genres)  
 - **`title.ratings.tsv.gz`** — user ratings and vote counts  
@@ -84,20 +81,40 @@ Breakdown:
 ---
 ## Method
 
-The analysis begins with a visual exploration of the data in R, where the distribution of ratings is examined across different vote counts. To account for the extreme skew in vote counts—since a few titles receive millions of votes while most receive very few—the votes variable is log-transformed.
+The analysis was conducted entirely in **R**, following a structured and automated workflow.  
+After cleaning and transforming the IMDb data, the relationship between **average rating** and **number of votes** was examined using a series of linear regression models.
 
-Next, the correlation between votes and ratings is calculated to provide a preliminary indication of their relationship. A very low correlation could suggest no relationship or a non-linear relationship.
+To correct for the strong right-skew in vote counts, the variable was **log-transformed**, and a **quadratic term** (`log_votes²`) was added to capture potential non-linear effects.  
+The dependent variable in all models was the **average IMDb rating**, representing perceived quality.
 
-To formally test the relationship, a polynomial regression model is estimated with rating as the dependent variable and log(votes) and log(votes)<sup>2</sup> as independent variables. This allows us to capture potential non-linear effects of vote counts on ratings.
+Four models were estimated sequentially:
+1. **Baseline linear model:**  
+   Tests the simple linear relationship between log-transformed votes and ratings, controlling for release period.
+2. **Quadratic model:**  
+   Adds the squared log(votes) term to test for a non-linear (U-shaped or inverted U-shaped) pattern.
+3. **Genre moderation model:**  
+   Introduces interaction terms between log(votes) and genre family (*Escapist* vs *Heavy*) to assess whether the relationship differs across genres.
+4. **Content form moderation model:**  
+   Includes interactions between log(votes) and type (*Movie* vs *Series*) to test whether audience engagement patterns vary across formats.
 
-To explore potential moderating effects of genre, an interaction term between ratings and genre (categorized as escapist: fantasy, comedy, romance; and heavy: drama, thriller) is added to a separate regression model. Similarly, another model includes an interaction term between ratings and content form. Finally, a full model combines both interaction terms to assess whether including these moderators improves model fit.
+Model comparisons (via ANOVA and adjusted R²) assess whether including non-linear and interaction terms improves explanatory power.  
+Each model’s results are supported by visualizations, allowing a clear interpretation of linearity, curvature, and moderation effects.
 
-For each regression, visualizations are produced to illustrate the relationships and interaction effects, providing a clear, graphical interpretation of the results.
+## Preview of Findings
+The analyses reveal the following:
+- An clear **non-linear (quadratic)** relationship between the number of votes and IMDb ratings.  
+- Titles with very few or very many votes tend to have **higher ratings on average**, while moderately popular titles receive more balanced evaluations.  
 
-## Preview of Findings 
-- Describe the gist of your findings (save the details for the final paper!)
-- How are the findings/end product of the project deployed?
-- Explain the relevance of these findings/product. 
+This pattern supports the **polarization hypothesis**: strong opinions drive engagement at both ends of the quality spectrum.
+
+Further, the results show that the relationship differs by both **genre** and **content form**.  
+- **Heavy genres** (e.g., drama, thriller) exhibit more pronounced polarization, with stronger audience divisions.  
+- **Escapist genres** (e.g., fantasy, comedy, romance) show flatter curves, indicating more uniform audience reception.  
+- **Movies** generally follow the U-shaped pattern, while **series** display a more inverted U-shape, suggesting that moderately popular series are rated highest.
+
+All models and visualizations are generated automatically and exported to the `gen/output/` directory, enabling full **reproducibility** and transparent interpretation of the results.
+
+These findings contribute to a better understanding of **audience behaviour** and **online rating dynamics**. They offer practical insights for **film studios**, **streaming platforms**, and **review aggregators** in interpreting consumer feedback and tailoring strategies to specific genres or content types.
 
 ## Repository Overview 
 
@@ -142,40 +159,47 @@ imdb-votes-vs-ratings/
        └── makefile
 ```
 
-## Dependencies 
-This repository contains R scripts and resources for data analysis and visualisation. To ensure smooth execution, it depends on a set of packages, most of which are built-in libraries.
+## Running Instructions
 
-External packages used
-- `readr` — for reading delimited files
-- `tidyverse` — for general data manipulation and visualization
-- `dplyr` — for data wrangling and transformation
-- `tidyr` — for data tidying
-- `ggplot2` — for visualization
-- `here` — for managing file paths across environments
-- `vroom` — for fast data import
-- `broom` — for tidying model outputs
-- `ordinal` — for ordinal regression analysis
+### Dependencies
+Please make sure the install the following:
+- **Make** – Installation guide: [here](https://tilburgsciencehub.com/building-blocks/configure-your-computer/automation/make/)  
+- **R** – Installation guide: [here](https://tilburgsciencehub.com/building-blocks/configure-your-computer/setup/software/r/)  
 
-To install all required functions, make use of the function install.packages(). 
-They can be loaded with the function library() or lapply()
+Before running the project with `make`, you must first install all required R packages.You can do this by running this following command in your terminal once:
+```bash
+Rscript src/1-raw-data/installing_packages_DIY.R
+```
 
+### Running the Code
 
-## Running Instructions 
+1. **Open your command line or terminal.**
+2. **Navigate to the project directory** (where this `README.md` file is located).  
+3. **Run the full automated workflow:**
+   ```bash
+   make
+   ```
+   This command executes all stages in sequence: data download, cleaning, analysis, and report generation.
 
-Using the makefile:
-Type "make"" in the terminal to run the entire project. To check the changes that will be made beforehand, type "make -n".
-Every single makefile has an instruction at the first line how to run the single makefile for that folder, instead of the entire project.
+### Generated Files
 
-Sidenotes:
-- Make has to be installed to
+After successful execution, the key output files are stored in the `gen/output/` directory:
 
+- `model1_2.png` – linear vs. quadratic model comparison  
+- `model3.png` – moderation by genre  
+- `model4.png` – moderation by content form  
+- Additional regression summaries and HTML visualizations
+
+The final report (`report.html` / `report.pdf`) is generated automatically in the reporting stage.
 
 ## Resources
-- Hsu, P., Shen, Y., & Xie, X. (2014). Predicting Movies User Ratings with Imdb Attributes. In Lecture notes in computer science (pp. 444–453). https://doi.org/10.1007/978-3-319-11740-9_41 
-- IMDB data files download. (n.d.). https://datasets.imdbws.com/ 
-- IMDB Non-Commercial datasets. (n.d.). developer.imdb.com. https://developer.imdb.com/non-commercial-datasets/ 
-- Ramos, M., Calvão, A. M., & Anteneodo, C. (2015). Statistical patterns in movie rating behavior. PLoS ONE, 10(8), e0136083. https://doi.org/10.1371/journal.pone.0136083 
-- Unveiling Audience Preferences: A big data analysis of IMDB movie ratings and trends. (2025, June 25). IEEE Conference Publication | IEEE Xplore. https://ieeexplore.ieee.org/abstract/document/11089925
+- Badami, M., Nasraoui, O., Sun, W., & Shafto, P. (2017). Detecting polarization in ratings: An automated pipeline and a preliminary quantification on several benchmark data sets. 2017 IEEE International Conference on Big Data (Big Data), 2682–2690. https://doi.org/10.1109/BigData.2017.8258231 researchwithrutgers.com
+- Baugher, D., & Ramos, C. (2017). The cross-platform consistency of online user movie ratings. Atlantic Marketing Journal, 5(3), Article 9. https://digitalcommons.kennesaw.edu/amj/vol5/iss3/9/ activityinsight.pace.edu
+- Gomes, A. L., Vianna, G., Escovedo, T., & Kalinowski, M. (2022). Predicting IMDb rating of TV series with deep learning: The case of Arrow. In Proceedings of the XVIII Brazilian Symposium on Information Systems (SBSI ’22). https://doi.org/10.1145/3535511.3535520 arXiv
+- Ramos, M., Calvão, A. M., & Anteneodo, C. (2015). Statistical patterns in movie rating behavior. PLOS ONE, 10(8), e0136083. https://doi.org/10.1371/journal.pone.0136083 PLOS
+- Schoenmueller, V., Netzer, O., & Stahl, F. (2020). The polarity of online reviews: Prevalence, drivers and implications. Journal of Marketing Research, 57(5), 853–877. https://doi.org/10.1177/0022243720941832 SAGE Journals
+- Sunder, S., Kim, K. H., & Yorkston, E. A. (2019). What drives herding behavior in online ratings? The role of rater experience, product portfolio, and diverging opinions. Journal of Marketing, 83(6), 93–112. https://doi.org/10.1177/0022242919875688 researchwithrutgers.com
+- Wasserman, M., Mukherjee, S., Scott, K., Zeng, X. H. T., Radicchi, F., & Amaral, L. A. N. (2015). Correlations between user voting data, budget, and box office for films in the Internet Movie Database. Journal of the Association for Information Science and Technology, 66(4), 858–868. https://doi.org/10.1002/asi.23213
 
 ## Authors
 This project is set up as part of the Master's course [Data Preparation & Workflow Management](https://dprep.hannesdatta.com/) at the [Department of Marketing](https://www.tilburguniversity.edu/about/schools/economics-and-management/organization/departments/marketing), [Tilburg University](https://www.tilburguniversity.edu/), the Netherlands.
