@@ -1,10 +1,9 @@
-print('starting download')
-# Load required packages 
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
+# download-data will download necessary data and place it in the data directory
+message("Downloading data...")
+
+# importing here and loading packages needed for data download
 library(here)
-
 source(here("src", "1-raw-data", "loading-packages.R"))
-
 
 # Data directory is the sibling folder ../../data
 data_dir <- "../../data"
@@ -37,4 +36,3 @@ sample_ratings <- vroom(ratings_path, delim = "\t") %>%
 message("Random samples created:")
 message("Sample basics rows: ", nrow(sample_basics))
 message("Sample ratings rows: ", nrow(sample_ratings))
-print('download complete')

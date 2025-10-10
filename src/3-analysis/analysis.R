@@ -1,9 +1,9 @@
+# Analysis takes the prepared data and conducts regression analysis 
+message('starting analysis...')
+
 #Load required packages
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
 library(here)
-
 source(here("src", "1-raw-data", "loading-packages.R"))
-
 
 #Load imdb dataset 
 imdb_analysis_main <- read_csv("../../data/clean/imdb_analysis.csv")
@@ -12,13 +12,11 @@ imdb_analysis_main <- read_csv("../../data/clean/imdb_analysis.csv")
 model_linear <- lm(averageRating ~ log_votes + period, data = imdb_analysis_main)
 summary(model_linear)
 tidy(model_linear)
-print('Model 1 made')
 
 #Model 2: regress rating (averageRating) on the log number of votes (log_votes), the quadratic log number of votes (log_votes2), controlling for period
 model_quadratic <- lm(averageRating ~ log_votes + log_votes2 + period, data = imdb_analysis_main)
 summary(model_quadratic)
 tidy(model_quadratic)
-print('Model 2 made')
 
 #Compare model fit
 anova(model_linear, model_quadratic)
@@ -28,7 +26,6 @@ model_interaction_genre <- lm( averageRating ~ log_votes + log_votes2 + genre_fa
   log_votes*genre_family + log_votes2*genre_family, data = imdb_analysis_main)
 summary(model_interaction_genre)
 tidy(model_interaction_genre)
-print('Model 3 made')
 
 #Model 4 (subQ 2): Interaction with the type (movie vs film) variable
 model_interaction_type <- lm(
@@ -36,7 +33,6 @@ model_interaction_type <- lm(
     log_votes*type + log_votes2*type,
   data = imdb_analysis_main)
 
-print('Model 4 made')
 summary(model_interaction_type)
 tidy(model_interaction_type)
 
@@ -48,7 +44,6 @@ Model_1_2 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
   geom_smooth(method = "lm", formula = y ~ poly(x, 2), color = "violet") +   # quadratic
   labs(title = "Average Rating vs Number of votes, linear and quadratic log number of votes",
        x = "Log(Number of Votes)", y = "Average Rating")
-print('Model 1,2 done')
 
 # Model 3 
 Model_3 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
@@ -60,7 +55,6 @@ Model_3 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
        color = "Genre") +
   facet_wrap(~ genre_family) +
   theme_minimal()
-print('Model 3 done')
 
 
 # Model 4
@@ -73,9 +67,6 @@ Model_4 <- ggplot(imdb_analysis_main, aes(x = log_votes, y = averageRating)) +
        color = "Content Type") +
   facet_wrap(~ type) +
   theme_minimal()
-print('Model 4 done')
-
-print('Visualization of all models done')
 
 # creating our gen/output folder
 dir.create("../../gen/output", recursive = TRUE, showWarnings = FALSE)
@@ -84,7 +75,6 @@ dir.create("../../gen/output", recursive = TRUE, showWarnings = FALSE)
 ggsave("../../gen/output/model1_2.png", Model_1_2, width = 8, height = 6)
 ggsave("../../gen/output/model3.png",   Model_3,   width = 8, height = 6)
 ggsave("../../gen/output/model4.png",   Model_4,   width = 8, height = 6)
-print('models saved in gen/output')
 
 # Define output paths first
 dir.create(here("gen", "output"), recursive = TRUE, showWarnings = FALSE)
@@ -106,13 +96,10 @@ modelsummary(
   title  = "Regression Models: Ratings vs Votes",
   stars  = TRUE)
 
-# Convert the HTML file to PNG
-if (!requireNamespace("webshot2", quietly = TRUE)) {
-  install.packages("webshot2")}
-
 # Take screenshot of the HTML table
 webshot2::webshot(url  = html_path,
   file = png_path,
   vwidth = 1600,
   zoom = 1.5)
 
+message('completed analysis, start reporting...')

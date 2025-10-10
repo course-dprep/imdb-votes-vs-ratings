@@ -1,13 +1,12 @@
-print('start load dataset prep')
-# Load required packages
-if (!requireNamespace("here", quietly = TRUE)) install.packages("here")
-library(here)
+# Data-preparation takes the clean data and prepares it for the analysis
+message('start preparing data...')
 
+# Load required packages
+library(here)
 source(here("src", "1-raw-data", "loading-packages.R"))
 
 # Load imdb dataset
 imdb_analysis <- read_csv("../../data/clean/imdb_enriched.csv")
-print('dataset loaded')
 
 #Create quadratic votes term
 imdb_analysis <- imdb_analysis %>%
@@ -51,4 +50,5 @@ imdb_analysis <- imdb_analysis %>%
 # Output
 write_csv(imdb_analysis, "../../data/clean/imdb_analysis.csv")
 write_rds(imdb_analysis, "../../data/clean/imdb_analysis.rds")
-print('output prep added')
+
+message('Data-preparation completed')
