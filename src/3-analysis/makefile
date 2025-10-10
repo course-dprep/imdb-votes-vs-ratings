@@ -19,5 +19,5 @@ $(PLOTS): analysis.R $(ANALYSIS_INPUT)
 	Rscript analysis.R
 
 # Clean outputs
-# clean:
-#	Rscript -e "unlink('$(OUTPUT_DIR)', recursive = TRUE, force = TRUE)"
+clean:
+	Rscript -e "unlink('$(OUTPUT_DIR)', recursive = TRUE, force = TRUE)"

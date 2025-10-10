@@ -18,6 +18,6 @@ $(STAMP): download-data.R loading-packages.R
 	R -e "file.create('$(STAMP)')"
 
 # Clean up downloaded data (optional: only run manually)
-# clean:
-# 	R -e "if (file.exists('$(STAMP)')) file.remove('$(STAMP)')"
-# 	R -e "files <- list.files('$(DATA_DIR)', pattern='\\.tsv\\.gz$$', full.names=TRUE); if (length(files)>0) file.remove(files)"
+clean:
+	R -e "if (file.exists('$(STAMP)')) file.remove('$(STAMP)')"
+	R -e "files <- list.files('$(DATA_DIR)', pattern='\\.tsv\\.gz$$', full.names=TRUE); if (length(files)>0) file.remove(files)"

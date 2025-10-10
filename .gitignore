@@ -28,3 +28,7 @@ Thumbs.db
 # ignore images
 .png
 *.png
+
+# ignore html
+.html
+*.html
