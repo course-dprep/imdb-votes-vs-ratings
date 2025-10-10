@@ -123,11 +123,12 @@ The repository is structured as follows:
 imdb-votes-vs-ratings/
 ├── makefile                     
 ├── README.md                    
-├── .gitignore                   
-├── .RData
+├── git
+├── .gitignore   
 ├── .Rhistory            
 ├── data/                       
-   ├── .download.stamp          
+   ├── title.basics.tsv.gz       
+   ├── title.ratings.tsv.gz 
    └── clean/                  
        ├── imdb_clean.csv
        ├── imdb_clean.rds
@@ -139,11 +140,16 @@ imdb-votes-vs-ratings/
    └── output/
        ├── model1_2.png
        ├── model3.png
-       └── model4.png
+       ├── model4.png
+       ├── basic_descriptives.png
+       ├── regression_models.png
+       ├── regression_models.html
+       └── report.html
 ├── src/                         
    ├── 1-raw-data/             
        ├── download-data.R
        ├── loading-packages.R
+       ├── installing_packages_DIY.R
        └── makefile
    ├── 2-data-preparation/     
        ├── data-cleaning.R
@@ -155,7 +161,7 @@ imdb-votes-vs-ratings/
        └── makefile
    └── 4-reporting/             
        ├── report.Rmd
-       ├── start_app.R
+       ├── report.html
        └── makefile
 ```
 
